@@ -1,0 +1,58 @@
+The overall plan for how to make the to do list
+
+Basic display: 
+
+user? 
+user information is displayed at the top in header. 
+- at first, it'll default to an automatic name and information then you can edit it later.
+- once information can be saved, it will start by prompting the user for information (name and email address) and then save that for next time.
+
+
+
+To Do Items: class
+a container with information about something you need to do
+-task 
+-description (optional)
+-deadline (optional) 
+-do at (optional) (Implement in phase 2)
+-priority (optional) : normal,high, urgent
+-project (optional, default is the general category)
+
+background things: 
+- unique id
+
+other things you can do: 
+- delete button to delete the task permanently
+- edit button: bring up a modify task screen identical to the create task screen to allow modification 
+- each time you make it, it is a different color, chosen randomly from a color theme.
+- completed button to check once its complete
+
+visualization: sticky note with tack
+
+
+
+Projects: class?
+an unordered list of tasks organized under one collective label
+if no project is specified, to-do items go into the "general" project
+
+
+- organize button to reorganize the tasks on the project based on various things, like: due date, do date, priority
+project.organizeDisplay('doBy') 'doAt' 'creation' 'priority': just a function to edit the DOM, doesn't change the items in the actual project
+
+
+- add task button to create a new task and stick it to the wall
+Add Task: button with an event listener which opens a modal dialog form to fill in information with a submit button that saves that information
+then puts it into the display (or delete the current board and repopulates it with all the tasks.)
+At first it will just put it right into the board, not organized in any way. 
+--> instance function of class Project:  project.putTodoOnBoard(todo); manipulate DOM
+
+
+visualization: wall (officey looking wall)
+
+Calendar: 
+A time-ordered list of all tasks with a due date or do date
+When you click on the calendar option, its function is to arrange the items on a page by due date
+
+
+Nice to Haves: 
+Search bar: searches for both projects and todo items
