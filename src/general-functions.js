@@ -8,4 +8,13 @@ function deleteContent() {
     }
 }
 
-export {deleteContent};
+function timeDelay(numCycles){
+
+    let outputString = '';
+    for (let i = 0; i < numCycles; i ++ ){
+        outputString += i;
+        
+    }
+    console.log(`ran ${numCycles} cycles, outputstring is ${outputString}`);
+}
+export {deleteContent,timeDelay};

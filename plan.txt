@@ -13,7 +13,7 @@ To Do Items: class
 a container with information about something you need to do
 -task 
 -description (optional)
--deadline (optional) 
+-deadline (optional) ; how to implement this?should be a date 
 -do at (optional) (Implement in phase 2)
 -priority (optional) : normal,high, urgent
 -project (optional, default is the general category)
@@ -23,7 +23,7 @@ background things:
 
 other things you can do: 
 - delete button to delete the task permanently
-- edit button: bring up a modify task screen identical to the create task screen to allow modification 
+- edit button: bring up a modify task screen identical to the create task screen to allow modification : check
 - each time you make it, it is a different color, chosen randomly from a color theme.
 - completed button to check once its complete
 
@@ -38,7 +38,7 @@ if no project is specified, to-do items go into the "general" project
 
 - organize button to reorganize the tasks on the project based on various things, like: due date, do date, priority
 project.organizeDisplay('doBy') 'doAt' 'creation' 'priority': just a function to edit the DOM, doesn't change the items in the actual project
-
+: done, sorting by age and priority done
 
 - add task button to create a new task and stick it to the wall
 Add Task: button with an event listener which opens a modal dialog form to fill in information with a submit button that saves that information
