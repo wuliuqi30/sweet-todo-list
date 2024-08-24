@@ -15,6 +15,6 @@ function timeDelay(numCycles){
         outputString += i;
         
     }
-    console.log(`ran ${numCycles} cycles, outputstring is ${outputString}`);
+    console.log(`ran ${numCycles} cycles`);
 }
 export {deleteContent,timeDelay};

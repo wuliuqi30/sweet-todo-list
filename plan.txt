@@ -56,3 +56,16 @@ When you click on the calendar option, its function is to arrange the items on a
 
 Nice to Haves: 
 Search bar: searches for both projects and todo items
+
+
+22 august
+- implement a format for deadline ; done
+- implement sort by deadline ; done
+- generate random color when put item into project
+- implement a button/form to add a new task/edit existing task
+- implement putting that new task onto the screen with its corresponding information
+
+
+
+24 august
+- get the input task, retrieval of task data and basic display on the screen working

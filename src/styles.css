@@ -162,6 +162,7 @@ body {
     height: var(--body-height);
     grid-template-rows: 200px 750px;
     grid-template-columns: max(250, 1fr) 80vw;
+    position: relative;
 }
 
 .navigation {
@@ -380,6 +381,15 @@ body {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     grid-template-rows: auto;
     gap: var(--projects-grid-gap);
+}
+
+.new-task-form-dialog{
+    position: absolute;
+    top: 25vh;
+    left: 25vw;
+    width: 300px;
+    padding: 20px;
+
 }
 
 .card {
