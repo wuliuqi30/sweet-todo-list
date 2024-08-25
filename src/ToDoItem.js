@@ -8,7 +8,9 @@ class ToDoItem {
     #description;
     #deadline;
     #priority; // a positive number: 1 is lowest, 3 is highest
+    #priorityName;
     #project;
+    #complete;
     #constructorWarningFlag = false; // Set this to true if anything goes wrong in the construction of this object
     #constructorWarningInfo = '';
     #modifyWarningFlag = false; // Set this to true if a mistake may have been made when modifying this item.
@@ -34,15 +36,21 @@ class ToDoItem {
         this.#task = task;
         this.#id = id;
         this.#description = description;
+
+        const dateRegex = /^\d{4}-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01])$/;
+
         if (deadline instanceof Date) {
             this.#deadline = format(deadline, "MM/dd/yyyy"); // input is a Date object
+        } else if (dateRegex.test(deadline)) {
+            this.#deadline = deadline;
         } else {
             this.#deadline = null;
             this.#constructorWarningFlag = true;
             this.#constructorWarningInfo = 'Invalid date was used to create item. Deadline set to null.';
         }
 
-        this.#priority = priority; // Can be 1 2 or 3
+        this.priority = priority; // Can be 1 2 or 3
+        this.#complete = false;
         this.#creationTime = new Date();
         console.log(`Created New To Do Item:`);
         console.table(this);
@@ -108,10 +116,27 @@ class ToDoItem {
             priorityIn = 1;
         }
         this.#priority = priorityIn;
+        this.#priorityName =  this.#getPriorityNameFromNumber(this.#priority);
     }
 
     get priority() {
         return this.#priority;
+    }
+
+    get priorityName(){
+        return this.#priorityName;
+    }
+
+    #getPriorityNameFromNumber(prior){
+        if (prior === 1){
+            return 'normal';
+        } else if (prior === 2){
+            return 'high';
+        } else if (prior === 3) {
+            return 'urgent';
+        } else {
+            return 'invalid';
+        }
     }
 
     set project(projectIn) {
@@ -122,6 +147,13 @@ class ToDoItem {
         return this.#project;
     }
 
+    set completeStatus(status){
+        this.#complete = status;
+    }
+
+    get completeStatus(){
+        return this.#complete;
+    }
 
 };
 

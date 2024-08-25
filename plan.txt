@@ -49,6 +49,13 @@ At first it will just put it right into the board, not organized in any way.
 
 visualization: wall (officey looking wall)
 
+sticky note: 
+- all the task informatin on it
+plus a delete button and a complete button
+
+
+
+
 Calendar: 
 A time-ordered list of all tasks with a due date or do date
 When you click on the calendar option, its function is to arrange the items on a page by due date
@@ -69,3 +76,19 @@ Search bar: searches for both projects and todo items
 
 24 august
 - get the input task, retrieval of task data and basic display on the screen working
+- get the project from a form, basic display on screen
+
+25 Aug: 
+
+- add completed tasks list to each project
+- create project display
+- implement complete tasks function which puts tasks in the completed section. and can go back the other way. 
+
+Need to make: 
+refresh project page (project)
+- delete current 
+- header, incopmlete, completed
+- put sticky note on board
+- delete sticky note
+- move from incomplete to complete
+- move frmo complete to incomplete

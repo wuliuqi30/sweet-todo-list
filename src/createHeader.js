@@ -1,6 +1,7 @@
-import {openTaskEditForm} from './openTaskEditForm.js';
+import {createTaskForm,openTaskEditForm} from './taskFormFunctions.js';
+import {openProjectEditForm} from './projectFormFunctions.js';
 
-function refreshHeader() {
+function createHeader() {
 
     const header = document.querySelector('.headerBottom');
 
@@ -13,17 +14,30 @@ function refreshHeader() {
     const ul = document.createElement('ul');
     ul.classList.add('page-actions');
     header.appendChild(ul);
+
+    // New Task Button
     const liNewTask = document.createElement('li');
     ul.appendChild(liNewTask);
     const newTaskButton = document.createElement('button');
     liNewTask.appendChild(newTaskButton);
-    newTaskButton.textContent = 'Create Task';
+    newTaskButton.textContent = 'Task';
 
     newTaskButton.addEventListener('click',(event)=>{
         openTaskEditForm();
     });
 
+    // New Project Button
+    const liNewProj = document.createElement('li');
+    ul.appendChild(liNewProj);
+    const newProjButton = document.createElement('button');
+    liNewProj.appendChild(newProjButton);
+    newProjButton.textContent = 'Project';
+
+    newProjButton.addEventListener('click',(event)=>{
+        openProjectEditForm();
+    });
+
     
 };
 
-export { refreshHeader };
+export { createHeader };

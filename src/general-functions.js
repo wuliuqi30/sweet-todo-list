@@ -1,3 +1,4 @@
+import {taskColors} from './globals.js';
 
 function deleteContent() {
     const contentDOM = document.getElementById("content")
@@ -17,4 +18,9 @@ function timeDelay(numCycles){
     }
     console.log(`ran ${numCycles} cycles`);
 }
-export {deleteContent,timeDelay};
+
+function getRandomColor(){
+    const randIndex = Math.floor(Math.random() * taskColors.length);
+    return taskColors[randIndex];
+}
+export {deleteContent,timeDelay,getRandomColor};

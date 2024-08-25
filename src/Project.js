@@ -2,11 +2,18 @@ import {compareDesc} from "date-fns";
 class Project {
 
     #toDoList = [];
+    #id = null;
 
-    constructor(name = 'project', id = 0) {
+    constructor(name = 'project') {
         this.name = name;
-        this.id = id;
+    }
 
+    get id() {
+        return this.#id;
+    }
+
+    set id(input){
+        this.#id = input;
     }
 
     findItemId(id) {
@@ -55,6 +62,14 @@ class Project {
 
     get toDoList() {
         return this.#toDoList;
+    }
+
+    get completedItems(){
+        return this.#toDoList.filter((item)=>item.completeStatus);
+    }
+
+    get incompleteItems(){
+        return this.#toDoList.filter((item)=>!item.completeStatus);
     }
 
     viewList() {
