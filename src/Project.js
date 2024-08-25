@@ -1,4 +1,4 @@
-import {compareDesc} from "date-fns";
+import { compareDesc } from "date-fns";
 class Project {
 
     #toDoList = [];
@@ -12,7 +12,7 @@ class Project {
         return this.#id;
     }
 
-    set id(input){
+    set id(input) {
         this.#id = input;
     }
 
@@ -35,7 +35,7 @@ class Project {
         if (this.findItemId(item.id) < 0) { // Didn't find this in the current project, good.
             item.project = this.name;
             this.#toDoList.push(item);
-            
+
             console.log(`Added item with id ${item.id} to project. Project now:`);
             this.view('all');
             return true;
@@ -64,16 +64,20 @@ class Project {
         return this.#toDoList;
     }
 
-    get completedItems(){
-        return this.#toDoList.filter((item)=>item.completeStatus);
+    get completedItems() {
+        return this.#toDoList.filter((item) => item.completeStatus);
     }
 
-    get incompleteItems(){
-        return this.#toDoList.filter((item)=>!item.completeStatus);
+    get incompleteItems() {
+        return this.#toDoList.filter((item) => !item.completeStatus);
     }
 
     viewList() {
-        console.table(this.#toDoList);
+        if (this.#toDoList.length > 0) {
+            console.table(this.#toDoList);
+        } else {
+            console.log('No Items in this project!');
+        }
     }
 
     get Ids() {
@@ -83,7 +87,7 @@ class Project {
     view(attribute) {
         if (attribute === 'all') {
             console.table(this.#toDoList);
-        }else if (attribute === 'id'){
+        } else if (attribute === 'id') {
             console.log(`ID: ${this.#toDoList.map(item => item.id)}`);
         } else if (attribute === 'deadline') {
             console.log(`Deadline:  ${this.#toDoList.map(item => item.deadline)}`);
@@ -124,29 +128,29 @@ class Project {
         this.view('priority');
     }
 
-    sortByDeadline(){
+    sortByDeadline() {
         console.log('Before sorting by deadline:');
 
         this.view('deadline');
-        this.#toDoList.sort(function(a,b){
-            return compareAsc(a.deadline,b.deadline);
+        this.#toDoList.sort(function (a, b) {
+            return compareAsc(a.deadline, b.deadline);
         });
 
         console.log('After sorting by deadline:');
         this.view('deadline');
     }
 
-    static transferItemBetweenProjects(projectA, projectB, itemIdInA){
+    static transferItemBetweenProjects(projectA, projectB, itemIdInA) {
         // Move item with id itemIdInA from project A to project B:
         console.log(`Attempting to move item with id ${itemIdInA} from project ${projectA.name} to project ${projectB.name}.`)
         // Check to make sure this item is in Project A 
         const itemIdx = projectA.findItemId(itemIdInA);
-        if (itemIdx > -1){
+        if (itemIdx > -1) {
             // console.log('Project A before transfer:')
             // projectA.viewList();
             // console.log('Project B before transfer:')
             // projectB.viewList();
-            
+
             projectB.addToDoItem(projectA.getItem(itemIdInA));
             projectA.deleteToDoItem(itemIdInA);
 
@@ -157,7 +161,7 @@ class Project {
         } else {
             console.log(`Failed to find item with id ${itemIdInA} in project ${projectA.name}. Couldn't do it.`);
         }
-         
+
     }
 };
 

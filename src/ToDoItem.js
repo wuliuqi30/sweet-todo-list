@@ -17,14 +17,14 @@ class ToDoItem {
     #modifyWarningInfo = '';
 
 
-    constructor(task = 'task', id = 0, description = '', deadline = null, priority = 1) {
+    constructor(task = 'task',  description = '', deadline = null, priority = 1) {
 
-        if (id < 0) {
-            console.log(`You are attempting to create an item with a negative id (${id}), which is not allowed. Automatically setting its ID to 0.`);
-            this.#constructorWarningFlag = true;
-            this.#constructorWarningInfo = 'Attemped to create object with negative ID';
-            id = 0;
-        }
+        // if (id < 0) {
+        //     console.log(`You are attempting to create an item with a negative id (${id}), which is not allowed. Automatically setting its ID to 0.`);
+        //     this.#constructorWarningFlag = true;
+        //     this.#constructorWarningInfo = 'Attemped to create object with negative ID';
+        //     id = 0;
+        // }
 
         if (this.#invalidPriority(priority)) {
             console.log('The priority was not one of the three allowed priorities of normal, high, or urgent. Automatically setting it to normal.')
@@ -34,7 +34,7 @@ class ToDoItem {
         }
 
         this.#task = task;
-        this.#id = id;
+        // this.#id = id;
         this.#description = description;
 
         const dateRegex = /^\d{4}-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01])$/;
@@ -72,6 +72,10 @@ class ToDoItem {
 
     get id() {
         return this.#id;
+    }
+
+    set id(input) {
+        this.#id = input;
     }
 
     get ageInMs() {

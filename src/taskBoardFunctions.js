@@ -1,4 +1,6 @@
 import {getRandomColor} from './general-functions.js';
+import { app } from './app.js';
+import {Project} from './Project.js';
 
 function updateTaskBoard(project){
     // This function will be kicked off by a clicking a button which contains the name of the project. 
@@ -35,6 +37,8 @@ function updateTaskBoard(project){
         const toDoItem = completeItems[i];
         addStickyNoteToTaskBoard(toDoItem,'completed');
     }
+    
+    app.printState();
 }
 
 
@@ -76,6 +80,42 @@ function addStickyNoteToTaskBoard(toDoItem,boardSelect){
     stickyNote.appendChild(priority);
     priority.textContent = `${toDoItem.priorityName} priority`;
 
+    // Delete and Completed Buttons
+
+    const deleteCompleteRow = document.createElement('div');
+    stickyNote.appendChild(deleteCompleteRow);
+    deleteCompleteRow.classList.add('input-row');
+
+    const deleteButton = document.createElement('button');
+    deleteCompleteRow.appendChild(deleteButton);
+    deleteButton.textContent = 'Delete';
+
+    // Clear the form and close the dialog when the "Cancel" button is clicked
+    deleteButton.addEventListener('click', (event) => {
+        // First delete the task from app
+        app.getProjectByName(toDoItem.project).deleteToDoItem(toDoItem.id);
+        // Second refresh the project page which will reflect the newly updated project without that task
+        updateTaskBoard(app.getProjectByName(toDoItem.project));
+    });
+
+    // const complete = document.createElement('button');
+    // submitRow.appendChild(submitButton);
+    // submitButton.setAttribute('type', 'submit');
+    // submitButton.setAttribute('id', 'confirmBtn');
+    // submitButton.setAttribute('value', 'default');
+    // submitButton.textContent = 'Confirm';
+
+    // submitButton.addEventListener('click', (event) => {
+    //     event.preventDefault();
+    //     if (!form.checkValidity()) {
+    //         // If the form is not valid, prevent the dialog from closing
+
+    //         form.reportValidity(); // Optionally display the validation messages
+    //         return;
+    //     }
+    //     // If the form is valid, proceed with closing the dialog
+    //     dialog.close('submit');
+    // })
 };
 
 

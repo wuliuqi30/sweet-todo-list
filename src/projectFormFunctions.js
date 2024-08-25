@@ -1,3 +1,5 @@
+import { app } from './app.js';
+import { updateTaskForm } from './taskFormFunctions.js';
 // Create a new project form.
 function createProjectForm(){
 
@@ -84,4 +86,30 @@ function clearProjectEditForm() {
     inputs.forEach(input => input.value = '');
 }
 
-export {openProjectEditForm,clearProjectEditForm,createProjectForm};
+function createProjectFormEventListener(){
+
+    const dialogProj = document.querySelector('.project-form-dialog');
+    // Below covers both cancel and submitting the form.
+    dialogProj.addEventListener("close", (e) => {
+      const outputVal = dialogProj.returnValue === 'default' ? 'No Return Value' : dialogProj.returnValue;
+      // alert(outputVal);
+    
+      if (outputVal === 'submit') {
+        const projectElement = document.getElementById('project-name');
+        const newProject = new Project(projectElement.value);
+        app.addProject(newProject);
+    
+        // The task form needs to update which projects you can choose
+        updateTaskForm();
+    
+        console.log(app);
+      }
+    
+      // Whether it was a submit or cancel, we're clearing the form now.
+      clearProjectEditForm();
+      app.printState();
+    })
+    
+}
+
+export {openProjectEditForm,clearProjectEditForm,createProjectForm,createProjectFormEventListener};

@@ -1,5 +1,7 @@
 import { format, compareAsc } from "date-fns";
 import { app } from './app.js';
+import { ToDoItem } from './ToDoItem.js';
+import { updateTaskBoard } from './taskBoardFunctions.js';
 
 function createTaskForm() {
 
@@ -198,4 +200,59 @@ function updateTaskForm() {
     updateProjectListSelect();
 }
 
-export { createTaskForm, openTaskEditForm, clearTaskEditForm, updateTaskForm };
+function createCloseTaskFormEventListener() {
+    const taskDialog = document.querySelector('.task-form-dialog');
+    // Below covers both cancel and submitting the form.
+    taskDialog.addEventListener("close", (e) => {
+        const outputVal = taskDialog.returnValue === 'default' ? 'No Return Value' : taskDialog.returnValue;
+
+        if (outputVal === 'submit') {
+            createTaskCloseFormProcessing()
+        }
+
+        // Whether it was a submit or cancel, we're clearing the form now.
+        clearTaskEditForm();
+
+    })
+}
+
+
+function createTaskCloseFormProcessing() {
+    const taskElement = document.getElementById('task');
+  
+    // The application assigns each new task a new unique id
+    const id = app.getNewTaskId();
+  
+    const descriptionFromForm = document.getElementById('description');
+  
+    const deadlineFromForm = document.getElementById('deadline');
+  
+    let inputDeadline = null;
+    // If the deadline from the form is empty, dont make a date from it.
+    if (deadlineFromForm.value) {
+      inputDeadline = new Date(Number(deadlineFromForm.value.slice(0, 4)),
+        Number(deadlineFromForm.value.slice(5, 7) - 1),
+        Number(deadlineFromForm.value.slice(8, 10)));
+    }
+  
+  
+    const priorityFromForm = document.getElementById('priority');
+  
+    const newToDoItem = new ToDoItem(
+      taskElement.value,
+      id,
+      descriptionFromForm.value,
+      inputDeadline,
+      Number(priorityFromForm.value));
+  
+    const projectFromForm = document.getElementById('project');
+    app.addTaskToProject(newToDoItem, projectFromForm.value);
+  
+    console.log(app);
+  
+    updateTaskBoard(app.getProjectByName(projectFromForm.value));
+  }
+
+
+
+export { createTaskForm, openTaskEditForm, clearTaskEditForm, updateTaskForm,createCloseTaskFormEventListener };

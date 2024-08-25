@@ -4,108 +4,55 @@ import { Project } from './Project.js';
 import { timeDelay } from './general-functions.js';
 import { format, compareAsc } from "date-fns";
 import { createHeader } from "./createHeader.js";
-import { createTaskForm, openTaskEditForm, clearTaskEditForm, updateTaskForm } from './taskFormFunctions.js';
-import { openProjectEditForm, clearProjectEditForm, createProjectForm } from './projectFormFunctions.js';
+import { createTaskForm, openTaskEditForm, clearTaskEditForm, updateTaskForm,createCloseTaskFormEventListener } from './taskFormFunctions.js';
+import { openProjectEditForm, clearProjectEditForm, createProjectForm,createProjectFormEventListener } from './projectFormFunctions.js';
 import { updateTaskBoard } from './taskBoardFunctions.js';
 
 
 window.ToDoItem = ToDoItem;
 window.Project = Project;
+window.updateTaskBoard = updateTaskBoard;
 
 // Create an 'app' object which keeps track of all the high level application information as an IIFE
 import { app } from './app.js';
 
 window.app = app;
 
-// Create the task input form (starts closed though)
+// Create the project input form:
 createProjectForm();
+createProjectFormEventListener();
+
+// Create the task input form (starts closed though):
 createTaskForm();
+createCloseTaskFormEventListener();
+
 // Create the header which also creates the create task button
 createHeader();
 
 
-const taskDialog = document.querySelector('.task-form-dialog');
-// Below covers both cancel and submitting the form.
-taskDialog.addEventListener("close", (e) => {
-  const outputVal = taskDialog.returnValue === 'default' ? 'No Return Value' : taskDialog.returnValue;
-  // alert(outputVal);
-
-  // Create the task here?
-
-  if (outputVal === 'submit') {
-    createTaskCloseFormProcessing()
-  }
-
-  // Whether it was a submit or cancel, we're clearing the form now.
-  clearTaskEditForm();
-
-})
-
-function createTaskCloseFormProcessing() {
-  const taskElement = document.getElementById('task');
-
-  // The application assigns each new task a new unique id
-  const id = app.getNewTaskId();
-
-  const descriptionFromForm = document.getElementById('description');
-
-  const deadlineFromForm = document.getElementById('deadline');
-
-  let inputDeadline = null;
-  // If the deadline from the form is empty, dont make a date from it.
-  if (deadlineFromForm.value) {
-    inputDeadline = new Date(Number(deadlineFromForm.value.slice(0, 4)),
-      Number(deadlineFromForm.value.slice(5, 7) - 1),
-      Number(deadlineFromForm.value.slice(8, 10)));
-  }
-
-
-  const priorityFromForm = document.getElementById('priority');
-
-  const newToDoItem = new ToDoItem(
-    taskElement.value,
-    id,
-    descriptionFromForm.value,
-    inputDeadline,
-    Number(priorityFromForm.value));
-
-  const projectFromForm = document.getElementById('project');
-  app.addTaskToProject(newToDoItem, projectFromForm.value);
-
-  console.log(app);
-
-  updateTaskBoard(app.getProjectByName(projectFromForm.value));
-}
-
-// Project Creation Form: 
-
-const dialogProj = document.querySelector('.project-form-dialog');
-// Below covers both cancel and submitting the form.
-dialogProj.addEventListener("close", (e) => {
-  const outputVal = dialogProj.returnValue === 'default' ? 'No Return Value' : dialogProj.returnValue;
-  // alert(outputVal);
-
-  // Create the task here?
-
-  if (outputVal === 'submit') {
-    const projectElement = document.getElementById('project-name');
-    const newProject = new Project(projectElement.value);
-    app.addProject(newProject);
-
-    // The task form needs to update which projects you can choose
-    updateTaskForm();
-
-    console.log(app);
-  }
-
-  // Whether it was a submit or cancel, we're clearing the form now.
-  clearProjectEditForm();
-})
-
-
-app.addTaskToProject(new ToDoItem('Laundry', 10, 'Do all the clothes', new Date(2024, 9, 1), 2), app.projectList[0].name);
+app.addTaskToProject(new ToDoItem('Laundry', 'Do all the clothes', new Date(2024, 9, 1), 2), app.projectList[0].name);
+updateTaskBoard(app.projectList[0]);
+app.addTaskToProject(new ToDoItem('Eat', 'Do all the clothes', new Date(2025, 9, 1), 2), app.projectList[0].name);
+updateTaskBoard(app.projectList[0]);
+app.addTaskToProject(new ToDoItem('Poop', 'Do all the clothes', new Date(2024, 10, 1), 2), app.projectList[0].name);
+updateTaskBoard(app.projectList[0]);
+app.addTaskToProject(new ToDoItem('Do Stuff', 'Do all the clothes', new Date(2024, 9, 1), 2), app.projectList[0].name);
 updateTaskBoard(app.projectList[0]);
 
+
+app.addProject(new Project('school'));
+app.addProject(new Project('housework'));
+
+app.addTaskToProject(new ToDoItem('Laundry', 'Do all the clothes', new Date(2024, 9, 1), 2), 'school');
+updateTaskBoard(app.getProjectByName('school'));
+app.addTaskToProject(new ToDoItem('Eat', 'Do all the clothes', new Date(2025, 9, 1), 2), 'school');
+updateTaskBoard(app.getProjectByName('school'));
+
+app.addTaskToProject(new ToDoItem('Laundry', 'Do all the clothes', new Date(2024, 9, 1), 2), 'housework');
+updateTaskBoard(app.getProjectByName('housework'));
+
+
+app.deleteProject(1);
 // console.log(format(new Date(2014, 1, 11), "MM/dd/yyyy"));
 // //=> '02/11/2014'
 
