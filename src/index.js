@@ -4,9 +4,9 @@ import { Project } from './Project.js';
 import { timeDelay } from './general-functions.js';
 import { format, compareAsc } from "date-fns";
 import { createHeader } from "./createHeader.js";
-import { createTaskForm, openTaskEditForm, clearTaskEditForm, updateTaskForm,createCloseTaskFormEventListener } from './taskFormFunctions.js';
-import { openProjectEditForm, clearProjectEditForm, createProjectForm,createProjectFormEventListener } from './projectFormFunctions.js';
-import { updateTaskBoard } from './taskBoardFunctions.js';
+import { createTaskForm,createCloseTaskFormEventListener } from './taskFormFunctions.js';
+import {  createProjectForm,createProjectFormEventListener } from './projectFormFunctions.js';
+import { updateTaskBoard,updateTaskProjectDisplay } from './taskBoardFunctions.js';
 
 
 window.ToDoItem = ToDoItem;
@@ -29,30 +29,34 @@ createCloseTaskFormEventListener();
 // Create the header which also creates the create task button
 createHeader();
 
+// Set up the task board display with project bars along the right side
 
-app.addTaskToProject(new ToDoItem('Laundry', 'Do all the clothes', new Date(2024, 9, 1), 2), app.projectList[0].name);
-updateTaskBoard(app.projectList[0]);
-app.addTaskToProject(new ToDoItem('Eat', 'Do all the clothes', new Date(2025, 9, 1), 2), app.projectList[0].name);
-updateTaskBoard(app.projectList[0]);
-app.addTaskToProject(new ToDoItem('Poop', 'Do all the clothes', new Date(2024, 10, 1), 2), app.projectList[0].name);
-updateTaskBoard(app.projectList[0]);
-app.addTaskToProject(new ToDoItem('Do Stuff', 'Do all the clothes', new Date(2024, 9, 1), 2), app.projectList[0].name);
-updateTaskBoard(app.projectList[0]);
+updateTaskProjectDisplay();
+
+
+
+app.addToDoItemToProject(new ToDoItem('Bills', 'Open the mail and pay the bills', new Date(2024, 9, 1), 2), app.projectList[0].name);
+
+app.addToDoItemToProject(new ToDoItem('Eat', 'Make breakfast and eat it.', new Date(2025, 9, 1), 2), app.projectList[0].name);
+
+app.addToDoItemToProject(new ToDoItem('Poop', 'Go to the toilet and do your duty.', new Date(2024, 10, 1), 2), app.projectList[0].name);
+
+app.addToDoItemToProject(new ToDoItem('Go outside', 'Take a nice walk around the neighborhood', new Date(2024, 9, 1), 2), app.projectList[0].name);
+updateTaskProjectDisplay();
 
 
 app.addProject(new Project('school'));
-app.addProject(new Project('housework'));
+app.addProject(new Project('work'));
 
-app.addTaskToProject(new ToDoItem('Laundry', 'Do all the clothes', new Date(2024, 9, 1), 2), 'school');
-updateTaskBoard(app.getProjectByName('school'));
-app.addTaskToProject(new ToDoItem('Eat', 'Do all the clothes', new Date(2025, 9, 1), 2), 'school');
-updateTaskBoard(app.getProjectByName('school'));
+app.addToDoItemToProject(new ToDoItem('Study for physics', 'Study chapters 2 and 3', new Date(2024, 9, 1), 2), 'school');
 
-app.addTaskToProject(new ToDoItem('Laundry', 'Do all the clothes', new Date(2024, 9, 1), 2), 'housework');
-updateTaskBoard(app.getProjectByName('housework'));
+app.addToDoItemToProject(new ToDoItem('Study for chemistry', 'chaps 34 and 36', new Date(2025, 9, 1), 2), 'school');
 
 
-app.deleteProject(1);
+app.addToDoItemToProject(new ToDoItem('Bring laptop', 'put laptop in bag to bring to work', new Date(2024, 9, 1), 2), 'work');
+app.addToDoItemToProject(new ToDoItem('Clean work clothes', 'clean and iron shirt and pants', new Date(2024, 9, 1), 2), 'work');
+updateTaskProjectDisplay();
+
 // console.log(format(new Date(2014, 1, 11), "MM/dd/yyyy"));
 // //=> '02/11/2014'
 

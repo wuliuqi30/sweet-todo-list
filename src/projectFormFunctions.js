@@ -1,5 +1,6 @@
 import { app } from './app.js';
 import { updateTaskForm } from './taskFormFunctions.js';
+import {updateTaskProjectDisplay} from './taskBoardFunctions.js';
 // Create a new project form.
 function createProjectForm(){
 
@@ -98,16 +99,16 @@ function createProjectFormEventListener(){
         const projectElement = document.getElementById('project-name');
         const newProject = new Project(projectElement.value);
         app.addProject(newProject);
-    
+        
+
         // The task form needs to update which projects you can choose
         updateTaskForm();
-    
-        console.log(app);
+        updateTaskProjectDisplay();
+        app.printState();
       }
     
       // Whether it was a submit or cancel, we're clearing the form now.
       clearProjectEditForm();
-      app.printState();
     })
     
 }

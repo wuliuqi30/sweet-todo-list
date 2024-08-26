@@ -1,7 +1,8 @@
 import { format, compareAsc } from "date-fns";
 import { app } from './app.js';
 import { ToDoItem } from './ToDoItem.js';
-import { updateTaskBoard } from './taskBoardFunctions.js';
+import { updateTaskBoard,updateTaskProjectDisplay } from './taskBoardFunctions.js';
+
 
 function createTaskForm() {
 
@@ -148,6 +149,7 @@ function createTaskForm() {
     })
 }
 
+
 function updateProjectListSelect() {
 
     const selectOld = document.getElementById('project');
@@ -180,6 +182,7 @@ function updateProjectListSelect() {
 
 function openTaskEditForm() {
     const dialog = document.querySelector('.task-form-dialog');
+    updateTaskBoard(app.getProjectById(app.getCurrentProjectId()));
     dialog.showModal();
 }
 
@@ -246,11 +249,12 @@ function createTaskCloseFormProcessing() {
       Number(priorityFromForm.value));
   
     const projectFromForm = document.getElementById('project');
-    app.addTaskToProject(newToDoItem, projectFromForm.value);
+    app.addToDoItemToProject(newToDoItem, projectFromForm.value);
   
     console.log(app);
-  
-    updateTaskBoard(app.getProjectByName(projectFromForm.value));
+    app.printState();
+    // updateTaskBoard(app.getProjectByName(projectFromForm.value));
+    updateTaskBoard(app.getProjectById(app.getCurrentProjectId()));
   }
 
 

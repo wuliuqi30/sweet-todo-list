@@ -86,9 +86,14 @@ Search bar: searches for both projects and todo items
 
 Need to make: 
 refresh project page (project)
-- delete current 
-- header, incopmlete, completed
-- put sticky note on board
-- delete sticky note
-- move from incomplete to complete
-- move frmo complete to incomplete
+- delete current - done
+- header, incopmlete, completed- done
+- put sticky note on board - done
+- delete sticky note - done
+
+
+- mark completed with button done
+- show in either complete or incomplete displays. done
+- move from incomplete to complete done
+- move frmo complete to incomplete done
+- switch to new project button. done

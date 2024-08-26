@@ -15,7 +15,7 @@ class ToDoItem {
     #constructorWarningInfo = '';
     #modifyWarningFlag = false; // Set this to true if a mistake may have been made when modifying this item.
     #modifyWarningInfo = '';
-
+    #color; 
 
     constructor(task = 'task',  description = '', deadline = null, priority = 1) {
 
@@ -157,6 +157,14 @@ class ToDoItem {
 
     get completeStatus(){
         return this.#complete;
+    }
+
+    set color(c){
+        this.#color = c;
+    }
+
+    get color(){
+        return this.#color;
     }
 
 };
