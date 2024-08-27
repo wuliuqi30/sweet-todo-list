@@ -5,6 +5,7 @@ import { createProjectForm, createProjectFormEventListener } from './projectForm
 import { updateTaskBoard, updateProjectDisplay } from './taskBoardFunctions.js';
 
 import { format, compareAsc } from "date-fns";
+import { ToDoItem } from './ToDoItem.js';
 
 // Nothing in this IIFE will update the display directly.
 const app = (function () {
@@ -158,6 +159,69 @@ const app = (function () {
         return returnVal;
     }
 
+    const overwriteFromLocalStorage = (appData) => {
+        // From the appData object, overwrite all the data on projects and tasks into here: 
+        taskId = appData.taskId
+        projectId = appData.projectId;
+        currentProjectDisplayedId = appData.currentProjectDisplayedId;
+        // Project
+        for (let p = 0; p<appData.projectList.length; p++){
+            const thisProj = appData.projectList[p];
+            projectList[p] = new Project(thisProj.name);
+            projectList[p].id = thisProj.id;
+
+            // Tasks in project:
+            const tasksList = appData.projectList[p].tasks;
+            for (let t = 0; t < tasksList.length; t ++ ){
+                const thisTask = tasksList[t];
+
+                
+                let deadline = thisTask.deadline;
+                if (!deadline){
+                    deadline = null;
+                } else {
+                    deadline = new Date(Number(deadline.slice(0,4)),Number(deadline.slice(5,7)),Number(deadline.slice(8,10)));
+                }
+                const creationTime = thisTask.creationTime;
+
+                const newToDoItem = new ToDoItem(
+                    thisTask.task,
+                    thisTask.description,
+                    deadline,
+                    thisTask.priority
+                );
+                
+                newToDoItem.id = thisTask.id;
+                newToDoItem.creationTime = new Date(Number(creationTime.slice(0,4)),Number(creationTime.slice(5,7)),Number(creationTime.slice(8,10)));
+                newToDoItem.priorityName = thisTask.priorityName;
+                newToDoItem.project = thisTask.project;
+
+                newToDoItem.complete = thisTask.complete;
+                
+                newToDoItem.constructorWarningFlag = thisTask.constructorWarningFlag; // Set this to true if anything goes wrong in the construction of this object
+                newToDoItem.constructorWarningInfo = thisTask.constructorWarningInfo;
+                newToDoItem.modifyWarningFlag = thisTask.modifyWarningFlag; // Set this to true if a mistake may have been made when modifying this item.
+                newToDoItem.modifyWarningInfo = thisTask.modifyWarningInfo;
+                newToDoItem.color = thisTask.color;
+
+                projectList[p].addToDoItem(newToDoItem);
+                
+
+            }
+
+        }
+        
+    }
+
+    const toJSON = () => {
+        return {
+            projectList: projectList,
+            taskId: taskId,
+            projectId: projectId, 
+            currentProjectDisplayedId:currentProjectDisplayedId
+        }
+    }
+
     return {
         projectList,
         addToDoItemToProject,
@@ -174,7 +238,9 @@ const app = (function () {
         getCurrentProjectId,
         getUpcomingTasks,
         modifyToDoItem,
-        getTaskFromId
+        getTaskFromId,
+        toJSON,
+        overwriteFromLocalStorage
     }
 })();
 

@@ -163,6 +163,14 @@ class Project {
         }
 
     }
+
+    toJSON() {
+        return {
+            name: this.name,
+            tasks: this.toDoList,
+            id: this.#id,
+        }
+    }
 };
 
 export { Project }; 

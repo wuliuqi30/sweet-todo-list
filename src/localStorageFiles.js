@@ -10,22 +10,17 @@ function saveAllDataToLocalStorage(){
 function loadAllDataFromLocalStorage(){
     const storedAppString = localStorage.getItem('appData');
     console.log(`Loaded appdatastring: ${storedAppString}`);
-    const storedApp = JSON.parse(storedAppString);
-    console.log(`loaded app: ${storedApp}`);
-    return storedApp;
+    const appData = JSON.parse(storedAppString);
+    console.log(`loaded app: ${appData}`);
+
+    app.overwriteFromLocalStorage(appData);
+    return appData;
 
     // The application is essentially a list of projects and a list of tasks.
 
 
 }
 
-function saveToDoItemToLocalStorage(item){
-    
-}
-
-function saveProjectToLocalStorage(){
-
-}
 
 
 export {saveAllDataToLocalStorage,loadAllDataFromLocalStorage};

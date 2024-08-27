@@ -15,9 +15,9 @@ class ToDoItem {
     #constructorWarningInfo = '';
     #modifyWarningFlag = false; // Set this to true if a mistake may have been made when modifying this item.
     #modifyWarningInfo = '';
-    #color; 
+    #color;
 
-    constructor(task = 'task',  description = '', deadline = null, priority = 1) {
+    constructor(task = 'task', description = '', deadline = null, priority = 1) {
 
         // if (id < 0) {
         //     console.log(`You are attempting to create an item with a negative id (${id}), which is not allowed. Automatically setting its ID to 0.`);
@@ -66,6 +66,10 @@ class ToDoItem {
     // Age of item:
     get creationTime() {
         return this.#creationTime;
+    }
+
+    set creationTime(time){
+        this.#creationTime = time;
     }
 
     get id() {
@@ -118,21 +122,25 @@ class ToDoItem {
             priorityIn = 1;
         }
         this.#priority = priorityIn;
-        this.#priorityName =  this.#getPriorityNameFromNumber(this.#priority);
+        this.#priorityName = this.#getPriorityNameFromNumber(this.#priority);
     }
 
     get priority() {
         return this.#priority;
     }
 
-    get priorityName(){
+    get priorityName() {
         return this.#priorityName;
     }
 
-    #getPriorityNameFromNumber(prior){
-        if (prior === 1){
+    set priorityName(name){
+        this.#priorityName = name;
+    }
+
+    #getPriorityNameFromNumber(prior) {
+        if (prior === 1) {
             return 'normal';
-        } else if (prior === 2){
+        } else if (prior === 2) {
             return 'high';
         } else if (prior === 3) {
             return 'urgent';
@@ -149,20 +157,40 @@ class ToDoItem {
         return this.#project;
     }
 
-    set completeStatus(status){
+    set completeStatus(status) {
         this.#complete = status;
     }
 
-    get completeStatus(){
+    get completeStatus() {
         return this.#complete;
     }
 
-    set color(c){
+    set color(c) {
         this.#color = c;
     }
 
-    get color(){
+    get color() {
         return this.#color;
+    }
+
+    toJSON() {
+        return {
+            creationTime: this.#creationTime,
+            ageInMs: this.#ageInMs,
+            task : this.#task,
+            id : this.#id,
+            description : this.#description,
+            deadline: this.#deadline, // a Date() object
+            priority: this.#priority, // a positive number: 1 is lowest, 3 is highest
+            priorityName: this.#priorityName,
+            project: this.#project,
+            complete: this.#complete,
+            constructorWarningFlag: this.#constructorWarningFlag, // Set this to true if anything goes wrong in the construction of this object
+            constructorWarningInfo: this.#constructorWarningInfo,
+            modifyWarningFlag: this.#modifyWarningFlag, // Set this to true if a mistake may have been made when modifying this item.
+            modifyWarningInfo: this.#modifyWarningInfo,
+            color: this.#color,
+        }
     }
 
 };
