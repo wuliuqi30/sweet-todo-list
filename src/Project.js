@@ -1,4 +1,4 @@
-import { compareDesc } from "date-fns";
+import { compareDesc,compareAsc } from "date-fns";
 class Project {
 
     #toDoList = [];
@@ -122,7 +122,7 @@ class Project {
         this.view('priority');
         this.#toDoList.sort((a, b) => {
             return b.priority - a.priority;
-        });
+        }); 
 
         console.log('After sorting by priority:');
         this.view('priority');

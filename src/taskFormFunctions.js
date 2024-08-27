@@ -1,7 +1,7 @@
 import { format, compareAsc } from "date-fns";
 import { app } from './app.js';
 import { ToDoItem } from './ToDoItem.js';
-import { updateTaskBoard,updateTaskProjectDisplay } from './taskBoardFunctions.js';
+import { updateTaskBoard,updateUpcoming } from './taskBoardFunctions.js';
 
 
 function createTaskForm() {
@@ -162,15 +162,7 @@ function updateProjectListSelect() {
     const inputRow5 = document.querySelector('.project-input-row');
     inputRow5.appendChild(selectNew);
 
-    const optionChoose = document.createElement('option');
-    selectNew.appendChild(optionChoose);
-
-    optionChoose.textContent = '--Choose Project--';
-    // If no project is chosen, it will automatically default to the general projects. 
-    // So it will be the same as the first option which is just general
-    optionChoose.setAttribute('value', app.projectList[0].name);
-
-    // Look at all current projects
+    // Add the remaining projects
     for (let i = 0; i < app.projectList.length; i++) {
         const option = document.createElement('option');
         selectNew.appendChild(option);
@@ -180,10 +172,36 @@ function updateProjectListSelect() {
 
 }
 
-function openTaskEditForm() {
+function openTaskEditForm(prefillToDoItem) {
     const dialog = document.querySelector('.task-form-dialog');
-    updateTaskBoard(app.getProjectById(app.getCurrentProjectId()));
+    updateProjectListSelect();
+    if (prefillToDoItem){
+        dialog.id = prefillToDoItem.id;
+        prefillToDoItemForm(prefillToDoItem);
+    } else{
+        dialog.id = '';
+    }
+
     dialog.showModal();
+}
+
+function prefillToDoItemForm(item){
+
+  
+    const task = document.getElementById('task');
+    task.value = item.task;
+    const descrip = document.getElementById('description');
+    descrip.value = item.description;
+    if (item.deadline){
+    const deadline = document.getElementById('deadline');
+    const val = format(item.deadline, "yyyy-MM-dd");
+    deadline.value = val;
+}
+    const priority = document.getElementById('priority');
+    priority.value = item.priority;
+    const project = document.getElementById('project');
+    project.value = item.project;
+
 }
 
 function clearTaskEditForm() {
@@ -221,15 +239,16 @@ function createCloseTaskFormEventListener() {
 
 
 function createTaskCloseFormProcessing() {
+    const dialog = document.querySelector('.task-form-dialog');
+
     const taskElement = document.getElementById('task');
-  
-    // The application assigns each new task a new unique id
-    const id = app.getNewTaskId();
-  
+    
     const descriptionFromForm = document.getElementById('description');
   
     const deadlineFromForm = document.getElementById('deadline');
   
+    const projectFromForm = document.getElementById('project');
+
     let inputDeadline = null;
     // If the deadline from the form is empty, dont make a date from it.
     if (deadlineFromForm.value) {
@@ -241,20 +260,38 @@ function createTaskCloseFormProcessing() {
   
     const priorityFromForm = document.getElementById('priority');
   
+    // If this todoitem already exists, modify existing item.
+    // Dialog will have an ID if this is modification of an existing task.
+    if (dialog.id){
+       
+        app.modifyToDoItem(Number(dialog.id),
+        projectFromForm.value,
+        taskElement.value,
+        descriptionFromForm.value,
+        inputDeadline,
+        Number(priorityFromForm.value)
+      )
+    } else {
+    // Else create a new item.
+
+    // The application assigns each new task a new unique id
+    const id = app.getNewTaskId();
+
     const newToDoItem = new ToDoItem(
-      taskElement.value,
-      id,
-      descriptionFromForm.value,
-      inputDeadline,
-      Number(priorityFromForm.value));
+        taskElement.value,
+        descriptionFromForm.value,
+        inputDeadline,
+        Number(priorityFromForm.value));
+    
+      
+      app.addToDoItemToProject(newToDoItem, projectFromForm.value);
+    }
+
   
-    const projectFromForm = document.getElementById('project');
-    app.addToDoItemToProject(newToDoItem, projectFromForm.value);
-  
-    console.log(app);
     app.printState();
     // updateTaskBoard(app.getProjectByName(projectFromForm.value));
     updateTaskBoard(app.getProjectById(app.getCurrentProjectId()));
+    updateUpcoming();
   }
 
 

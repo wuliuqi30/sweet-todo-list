@@ -1,6 +1,6 @@
 import { app } from './app.js';
 import { updateTaskForm } from './taskFormFunctions.js';
-import {updateTaskProjectDisplay} from './taskBoardFunctions.js';
+import {updateProjectDisplay} from './taskBoardFunctions.js';
 // Create a new project form.
 function createProjectForm(){
 
@@ -51,6 +51,7 @@ function createProjectForm(){
     // Clear the form and close the dialog when the "Cancel" button is clicked
     cancelButton.addEventListener('click', () => {
         // Close the dialog
+        event.preventDefault();
         dialog.close();
     });
 
@@ -103,7 +104,7 @@ function createProjectFormEventListener(){
 
         // The task form needs to update which projects you can choose
         updateTaskForm();
-        updateTaskProjectDisplay();
+        updateProjectDisplay();
         app.printState();
       }
     

@@ -97,3 +97,32 @@ refresh project page (project)
 - move from incomplete to complete done
 - move frmo complete to incomplete done
 - switch to new project button. done
+
+
+8/26
+
+- reformat layout
+
+Features: 
+- Sort by button on finished and unfinished task list
+- display projects on left side that are clickable - done
+- display all upcoming tasks on the right side- done (future: make clickable)
+    - can filter by project as well
+- fixed sizing for task board - done
+
+
+
+Style:
+- spend time getting sizing and padding looking better - did some
+- get a good font and color scheme - some
+- research how to get a sticky note design  - done
+- background designs for the wall 
+- Today's date in the header 
+- adjust header acc to design  
+- implement a basic local storage
+
+Future: 
+- Search bar actually works and finds the task
+- To do items in the main display are clickable which highlights them 
+and potentially pulls up a small display with options to complete, delete, move, or edit.
+

@@ -6,7 +6,7 @@ class ToDoItem {
     #task;
     #id;
     #description;
-    #deadline;
+    #deadline; // a Date() object
     #priority; // a positive number: 1 is lowest, 3 is highest
     #priorityName;
     #project;
@@ -37,12 +37,10 @@ class ToDoItem {
         // this.#id = id;
         this.#description = description;
 
-        const dateRegex = /^\d{4}-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01])$/;
+        // const dateRegex = /^\d{4}-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01])$/;
 
         if (deadline instanceof Date) {
-            this.#deadline = format(deadline, "MM/dd/yyyy"); // input is a Date object
-        } else if (dateRegex.test(deadline)) {
-            this.#deadline = deadline;
+            this.#deadline = deadline; // input is a Date object
         } else {
             this.#deadline = null;
             this.#constructorWarningFlag = true;
@@ -106,7 +104,7 @@ class ToDoItem {
     }
 
     set deadline(deadlineIn) {
-        this.#deadline = format(deadlineIn, "MM/dd/yyyy");
+        this.#deadline = deadlineIn;
     }
 
     get deadline() {

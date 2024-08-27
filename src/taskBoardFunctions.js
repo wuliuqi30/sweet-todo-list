@@ -2,6 +2,9 @@ import { getRandomColor } from './general-functions.js';
 import { app } from './app.js';
 import { Project } from './Project.js';
 import { sizeParams } from './globals.js';
+import { format, compareAsc } from "date-fns";
+import { openTaskEditForm } from './taskFormFunctions.js';
+import { openProjectEditForm } from './projectFormFunctions.js';
 
 function createNewTaskBoard() {
 
@@ -27,12 +30,25 @@ function createNewTaskBoard() {
     taskBoard.appendChild(completedBoard);
 }
 
-function updateTaskBoard(project) {
-    // This function will be kicked off by a clicking a button which contains the name of the project. 
+function updateTaskBoard() {
 
-
+    const project = app.getCurrentDisplayedProject();
     const header = document.querySelector('.tasks-header');
-    header.textContent = project.name;
+    header.innerHTML = '';
+
+    const taskBoardTitle = document.createElement('div');
+    taskBoardTitle.classList.add('task-board-title');
+    header.appendChild(taskBoardTitle);
+    taskBoardTitle.textContent = project.name;
+
+    // New Task Button
+    const newTaskButton = document.createElement('button');
+    header.appendChild(newTaskButton);
+    newTaskButton.textContent = 'New Task';
+
+    newTaskButton.addEventListener('click', (event) => {
+        openTaskEditForm();
+    });
 
     // Update incomplete tasks board
 
@@ -76,7 +92,7 @@ function addStickyNoteToTaskBoard(toDoItem, boardSelect) {
     const stickyNote = document.createElement('div');
     taskBoard.appendChild(stickyNote);
     stickyNote.classList.add('sticky-note');
-    stickyNote.style.backgroundColor = toDoItem.color;
+    stickyNote.classList.add(toDoItem.color);
 
     // Title: task name
     const title = document.createElement('p');
@@ -92,7 +108,7 @@ function addStickyNoteToTaskBoard(toDoItem, boardSelect) {
     const deadline = document.createElement('p');
     stickyNote.appendChild(deadline);
     if (toDoItem.deadline) {
-        deadline.textContent = `Due ${toDoItem.deadline}`;
+        deadline.textContent = `Due ${format(toDoItem.deadline, "MM/dd/yyyy")}`;
     }
 
 
@@ -100,10 +116,72 @@ function addStickyNoteToTaskBoard(toDoItem, boardSelect) {
     stickyNote.appendChild(priority);
     priority.textContent = `${toDoItem.priorityName} priority`;
 
-    // Delete and Completed Buttons
+    const expandDotsButton = document.createElement('button');
+    expandDotsButton.classList.add('expand-dots-button');
+    stickyNote.appendChild(expandDotsButton);
+
+    expandDotsButton.addEventListener('click', (event) => {
+        // open dotsmenu
+        const dotsMenu = document.createElement('div');
+        stickyNote.appendChild(dotsMenu);
+        dotsMenu.classList.add('dots-menu');
+
+        // Modify 
+        const modifyButton = document.createElement('button');
+        dotsMenu.appendChild(modifyButton);
+        modifyButton.textContent = 'Modify';
+
+        // Clear the form and close the dialog when the "Cancel" button is clicked
+        modifyButton.addEventListener('click', (event) => {
+            openTaskEditForm(toDoItem);
+        });
+
+        // Change Project Select:
+        const inputRowNew = document.createElement('div');
+        inputRowNew.classList.add('input-row');
+        dotsMenu.appendChild(inputRowNew);
+
+        const changeProjLabel = document.createElement('label');
+        changeProjLabel.textContent = 'Change Project?';
+        changeProjLabel.setAttribute('for', `${toDoItem.task}-change-project`);
+        inputRowNew.appendChild(changeProjLabel);
+
+        const changeProjSelect = document.createElement('select');
+        changeProjSelect.setAttribute('id', `${toDoItem.task}-change-project`);
+        inputRowNew.appendChild(changeProjSelect);
+
+        const optionChoose = document.createElement('option');
+        changeProjSelect.appendChild(optionChoose);
+        optionChoose.textContent = '--Change Project to--';
+
+        optionChoose.setAttribute('value', 'none');
+
+        const currentProjectIndex = app.getProjectIndexFromId(app.getCurrentProjectId());
+        // Look at all current projects except the current one:
+        for (let i = 0; i < app.projectList.length; i++) {
+            if (i !== currentProjectIndex) {
+                const option = document.createElement('option');
+                changeProjSelect.appendChild(option);
+                option.setAttribute('value', app.projectList[i].name);
+                option.textContent = app.projectList[i].name;
+            }
+        }
+
+        changeProjSelect.addEventListener('change', (event) => {
+            let val = event.target.value;
+            if (val !== 'none') {
+                Project.transferItemBetweenProjects(app.getCurrentDisplayedProject(),
+                    app.getProjectByName(val), toDoItem.id);
+                updateTaskBoard();
+            }
+
+        })
+
+
+            // Delete and Completed Buttons
 
     const deleteCompleteRow = document.createElement('div');
-    stickyNote.appendChild(deleteCompleteRow);
+    dotsMenu.appendChild(deleteCompleteRow);
     deleteCompleteRow.classList.add('input-row');
 
     const deleteButton = document.createElement('button');
@@ -116,14 +194,15 @@ function addStickyNoteToTaskBoard(toDoItem, boardSelect) {
         app.getProjectByName(toDoItem.project).deleteToDoItem(toDoItem.id);
         // Second refresh the project page which will reflect the newly updated project without that task
         // updateTaskBoard(app.getProjectByName(toDoItem.project));
-        updateTaskProjectDisplay();
+        updateTaskBoard();
+        updateUpcoming();
     });
 
     const completeButton = document.createElement('button');
     deleteCompleteRow.appendChild(completeButton);
 
     if (boardSelect === 'incomplete') {
-        completeButton.textContent = 'Complete?';
+        completeButton.textContent = 'Mark as Complete?';
     } else {
         completeButton.textContent = 'Reset as incomplete?';
     }
@@ -132,90 +211,65 @@ function addStickyNoteToTaskBoard(toDoItem, boardSelect) {
         // Toggle its completeness state.
         toDoItem.completeStatus = !toDoItem.completeStatus;
         // Then refresh the display to reflect the item's new status: 
-        updateTaskBoard(app.getProjectById(app.getCurrentProjectId()));
+        updateTaskBoard();
+        updateUpcoming();
     })
 
-    // Change Project Select:
-    const inputRowNew = document.createElement('div');
-    inputRowNew.classList.add('input-row');
-    stickyNote.appendChild(inputRowNew);
 
-    const changeProjLabel = document.createElement('label');
-    changeProjLabel.textContent = 'Change Project?';
-    changeProjLabel.setAttribute('for', 'change-project');
-    inputRowNew.appendChild(changeProjLabel);
 
-    const changeProjSelect = document.createElement('select');
-    changeProjSelect.setAttribute('id', 'change-project');
-    inputRowNew.appendChild(changeProjSelect);
+        dotsMenu.addEventListener('mouseleave', (event) => {
+            dotsMenu.remove();
 
-    const optionChoose = document.createElement('option');
-    changeProjSelect.appendChild(optionChoose);
-    optionChoose.textContent = '--Change Project to--';
+        });
 
-    optionChoose.setAttribute('value', 'none');
 
-    const currentProjectIndex = app.getProjectIndexFromId(app.getCurrentProjectId());
-    // Look at all current projects except the current one:
-    for (let i = 0; i < app.projectList.length; i++) {
-        if (i !== currentProjectIndex) {
-            const option = document.createElement('option');
-            changeProjSelect.appendChild(option);
-            option.setAttribute('value', app.projectList[i].name);
-            option.textContent = app.projectList[i].name;
-        }
-    }
-
-    changeProjSelect.addEventListener('change', (event) => {
-        let val = event.target.value;
-        if (val !== 'none') {
-            Project.transferItemBetweenProjects(app.getCurrentDisplayedProject(),
-                app.getProjectByName(val), toDoItem.id);
-            updateTaskBoard(app.getCurrentDisplayedProject());
-        }
 
     })
+
 
 };
 
-function updateTaskProjectDisplay() {
-    // | Task Board            |p|p|
-    // |                       |r|r|
-    // |                       |o|o|
-    // |                       |j|j|
-    const taskProjectDisplay = document.querySelector('.tasks-projects-display');
+function updateProjectDisplay() {
 
-    taskProjectDisplay.innerHTML = '';
+    const projectNavigation = document.querySelector('.project-nav');
 
-    const currentProjectInDisplayId = app.getCurrentProjectId();
+    projectNavigation.innerHTML = '';
 
-    // Refresh the information in the task board. 
+    const navHeader = document.createElement('div');
+    projectNavigation.appendChild(navHeader);
+    navHeader.classList.add('nav-header');
 
-    const currentProjectIndex = app.getProjectIndexFromId(app.getCurrentProjectId());
+    const navHeaderTitle = document.createElement('h2');
+    navHeader.appendChild(navHeaderTitle);
+    navHeaderTitle.textContent = 'Projects';
 
-    let reachedCurrentProject = false;
+    // New Project Button
+
+    const newProjButton = document.createElement('button');
+    navHeader.appendChild(newProjButton);
+    newProjButton.textContent = 'New';
+    newProjButton.classList.add('new-project-button');
+
+    newProjButton.addEventListener('click', (event) => {
+        openProjectEditForm();
+    });
+
     for (let p = 0; p < app.projectList.length; p++) {
 
-        // If this is before the current project, put the bar before task board: 
-        if (p === currentProjectIndex) {
-            createNewTaskBoard();
-            updateTaskBoard(app.getCurrentDisplayedProject());
-        } else {
-            // For each project besides the one currently in the display,
-            // put a sideways button
-            const thisProj = app.projectList[p];
-
-            const projectButton = document.createElement('button');
-            projectButton.classList.add('rotated-project');
-            projectButton.textContent = thisProj.name;
-            projectButton.style.width = `${sizeParams.projectBarWidth}px`;
-            taskProjectDisplay.appendChild(projectButton);
-            projectButton.addEventListener('click', (event) => {
-                // Refresh this whole display again, but with a new project as the current project
-                app.setCurrentProjectId(thisProj.id);
-                updateTaskProjectDisplay()
-            });
-        }
+        const thisProj = app.projectList[p];
+        const projectButton = document.createElement('button');
+        projectButton.classList.add('project-nav-button');
+        projectButton.textContent = thisProj.name;
+        // projectButton.style.width = `${sizeParams.projectBarWidth}px`;
+        projectNavigation.appendChild(projectButton);
+        projectButton.addEventListener('click', (event) => {
+            // Refresh the task display
+            app.setCurrentProjectId(thisProj.id);
+            const projectsAll = document.querySelectorAll('.project-nav-button');
+            projectsAll.forEach(button => button.classList.remove('current-project'));
+            event.target.classList.add('current-project');
+            updateTaskBoard();
+        });
     }
 }
 
@@ -226,5 +280,56 @@ function calculateTaskBoardWidth(numProjects) {
     return totalWidth - (numProjects - 1) * sizeParams.projectBarWidth;
 
 }
+function updateUpcoming() {
+    const upcomingDisplay = document.querySelector('.upcoming');
 
-export { createNewTaskBoard, updateTaskBoard, updateTaskProjectDisplay };
+    upcomingDisplay.innerHTML = '';
+
+    const upcomingHeader = document.createElement('div');
+    upcomingDisplay.appendChild(upcomingHeader);
+    upcomingHeader.classList.add('nav-header');
+    upcomingHeader.textContent = 'Upcoming Deadlines:';
+
+    // Display the 5 most pressing upcoming tasks.
+    const upcomingTasks = app.getUpcomingTasks(5, 'all');
+    console.log('the 5 latest')
+    console.table(upcomingTasks);
+    for (let t = 0; t < upcomingTasks.length; t++) {
+
+        const thisToDoItem = upcomingTasks[t];
+        const upcomingContainer = document.createElement('div');
+        upcomingDisplay.appendChild(upcomingContainer);
+        upcomingContainer.classList.add('upcoming-item');
+
+        const taskName = document.createElement('span');
+        upcomingContainer.appendChild(taskName);
+        taskName.textContent = thisToDoItem.task;
+
+        const projName = document.createElement('span');
+        upcomingContainer.appendChild(projName);
+        projName.textContent = `, ${thisToDoItem.project},`;
+
+        if (thisToDoItem.deadline) {
+            const dueDate = document.createElement('span');
+            upcomingContainer.appendChild(dueDate);
+            dueDate.textContent = ` Due ${format(thisToDoItem.deadline, "MM/dd/yyyy")}`;
+        }
+
+        // projectButton.addEventListener('click', (event) => {
+        //     // Refresh the task display
+        //     app.setCurrentProjectId(thisProj.id);
+        //     const projectsAll = document.querySelectorAll('.project-nav-button');
+        //     projectsAll.forEach(button => button.classList.remove('current-project'));
+        //     event.target.classList.add('current-project');
+        //     updateTaskBoard();
+        // });
+    }
+}
+
+function refreshEverything() {
+    updateProjectDisplay();
+    updateTaskBoard();
+    updateUpcoming();
+}
+
+export { createNewTaskBoard, updateTaskBoard, updateProjectDisplay, refreshEverything, updateUpcoming };
