@@ -14,7 +14,7 @@ function createTaskForm() {
     body.appendChild(dialog);
     const title = document.createElement('p');
     dialog.appendChild(title);
-    title.textContent = 'Create your task if you like.';
+    title.textContent = 'Create a task.';
     const fieldSet = document.createElement('fieldset');
     dialog.appendChild(fieldSet);
     const form = document.createElement('form');
@@ -121,7 +121,7 @@ function createTaskForm() {
     cancelButton.setAttribute('value', 'cancelValue');
     cancelButton.setAttribute('formmethod', 'dialog');
     cancelButton.textContent = 'Cancel';
-
+    cancelButton.setAttribute('id','task-form-cancel-button')
     // Clear the form and close the dialog when the "Cancel" button is clicked
     cancelButton.addEventListener('click', (event) => {
         event.preventDefault();
@@ -132,7 +132,7 @@ function createTaskForm() {
     const submitButton = document.createElement('button');
     submitRow.appendChild(submitButton);
     submitButton.setAttribute('type', 'submit');
-    submitButton.setAttribute('id', 'confirmBtn');
+    submitButton.setAttribute('id', 'task-form-submit-button');
     submitButton.setAttribute('value', 'default');
     submitButton.textContent = 'Confirm';
 

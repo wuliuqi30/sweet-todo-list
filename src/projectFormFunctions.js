@@ -13,7 +13,7 @@ function createProjectForm(){
     body.appendChild(dialog);
     const title = document.createElement('p');
     dialog.appendChild(title);
-    title.textContent = 'Create a new project if you like.';
+    title.textContent = 'Create a new project.';
     const fieldSet = document.createElement('fieldset');
     dialog.appendChild(fieldSet);
     const form = document.createElement('form');
@@ -47,6 +47,7 @@ function createProjectForm(){
     submitRow.appendChild(cancelButton);
     cancelButton.setAttribute('value', 'cancelValue');
     cancelButton.setAttribute('formmethod', 'dialog');
+    cancelButton.classList.add('form-cancel-button');
     cancelButton.textContent = 'Cancel';
 
     // Clear the form and close the dialog when the "Cancel" button is clicked
@@ -60,6 +61,7 @@ function createProjectForm(){
     submitRow.appendChild(submitButton);
     submitButton.setAttribute('type','submit');
     submitButton.setAttribute('id', 'projectConfirmBtn');
+    submitButton.classList.add('form-submit-button');
     submitButton.setAttribute('value', 'default');
     submitButton.textContent = 'Confirm';
 

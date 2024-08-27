@@ -65,6 +65,8 @@ h6 {
     --sticky-note-flap-offset-height: 15px;
     --sticky-note-flap-offset-width: 20px;
 
+    --small-button-padding: 4px;
+
     --task-board-grid-width: calc(1 * var(--sticky-note-width));
     --task-board-grid-height: var(--task-board-grid-width);
     font-family: "Chakra Petch", sans-serif;
@@ -97,7 +99,7 @@ h6 {
     --lighter-color-font-color: #292524;
     --projects-bg-color: #92400e;
     --projects-button-bg-color: var(--lighter-color);
-    --projects-button-color: var(--lighter-color-font-color);
+    --projects-button-color: black;
 
     --tasks-header-bg-color:var(--lighter-color);
     --incomplete-tasks-bg-color:#b45309;
@@ -221,6 +223,8 @@ body {
     padding-right: var(--header-left-right-margin);
     height: 20vh;
 
+    
+
 }
 
 .reload-session-button{
@@ -228,7 +232,21 @@ body {
 
     width: 300px;
     height: 50px;
+
+    background-color: var(--lighter-color);
+    border: 1px solid black;
+
+    font-weight: 800;
+
+    flex: 0 0 auto;
+
 }
+
+.reload-session-button:first-child{
+    margin-left: auto;
+}
+
+
 
 .headerTop {
     display: flex;
@@ -353,12 +371,12 @@ button{
 
 .project-nav-button{
     padding: 5px;
-    font-weight: 400;
+    font-weight: 800;
     width: 150px;
     align-self: center;
 
     color: var(--projects-button-color);
-    background-color: var(--projects-button-bg-color);
+    background-color: var(--lighter-color);
 }
 
 
@@ -377,7 +395,7 @@ button{
 }
 
 .new-project-button{
-    color: rgb(78, 21, 21);
+    background-color: var(--lighter-color);
     margin-left: auto;
     padding: 4px;
     
@@ -463,7 +481,8 @@ button{
     width: var(--sticky-note-width);
     height: var(--sticky-note-height);
 
-    position:relative;
+    display:flex; 
+    flex-direction: column;
 
     justify-self: center;
     align-self: center;
@@ -499,8 +518,29 @@ button{
     padding: 3px;
 }
  
+.sticky-note-buttons-row{
+    display:flex;
+    justify-content: space-between;
+    margin-top: auto;
+    padding: 3px;
+}
+
+
 .sticky-note button{
     padding: 2px;
+    width: 45px;
+    text-align: center;
+    font-size: .7rem;
+    background-color: var(--lighter-color);
+    border: 1px solid black;
+}
+
+.new-task-button{
+    padding: 2px;
+    text-align: center;
+    color: #ffffff;
+    background-color: var(--projects-bg-color);
+    border: 1px solid black;
 }
 
 .sticky-note .expand-dots-button{
@@ -628,6 +668,19 @@ button{
     height: 450px;
     padding: 20px;
 
+    background-color: var(--lighter-color);
+
+}
+
+.form-cancel-button{
+    margin-left:auto;
+    background-color: #ea580c;
+    padding: var(--small-button-padding);
+}
+
+.form-submit-button{
+    background-color: #bef264;
+    padding: var(--small-button-padding);
 }
 
 
@@ -639,7 +692,7 @@ button{
     width: 400px;
     /* height: 450px; */
     padding: 20px;
-
+    background-color: var(--lighter-color);
 }
 
 /*-------------------------------------- */
@@ -649,14 +702,29 @@ button{
     grid-column: 3 / 4;
     grid-row: 2 / 5;
     background-color: var(--upcoming-bg-color);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    padding: 5px;
 }
 
 .upcoming-item{
  padding: 10px;
- color: white;
+ background-color: var(--lighter-color);
+ color: black;
+ border-radius: 15px;
 }
 
+.upcoming-task-name{
+    font-weight:500;
 
+}
+
+.upcoming-project-name{
+    font-weight:700;
+    font-style: italic;
+}
 
 .upcoming .card-title {
     font-weight: var(--announcement-title-font-weight);

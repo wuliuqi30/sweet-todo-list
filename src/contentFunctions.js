@@ -44,6 +44,7 @@ function updateTaskBoard() {
     const newTaskButton = document.createElement('button');
     header.appendChild(newTaskButton);
     newTaskButton.textContent = 'New Task';
+    newTaskButton.classList.add('new-task-button');
 
     newTaskButton.addEventListener('click', (event) => {
         openTaskEditForm();
@@ -111,109 +112,118 @@ function addStickyNoteToTaskBoard(toDoItem, boardSelect) {
     stickyNote.appendChild(priority);
     priority.textContent = `${toDoItem.priorityName} priority`;
 
-    const expandDotsButton = document.createElement('button');
-    expandDotsButton.classList.add('expand-dots-button');
-    stickyNote.appendChild(expandDotsButton);
 
-    expandDotsButton.addEventListener('click', (event) => {
-        // open dotsmenu
-        const dotsMenu = document.createElement('div');
-        stickyNote.appendChild(dotsMenu);
-        dotsMenu.classList.add('dots-menu');
+    // Bottom row for buttons: 
+    // Delete and Completed Buttons
 
-        // Modify 
-        const modifyButton = document.createElement('button');
-        dotsMenu.appendChild(modifyButton);
-        modifyButton.textContent = 'Modify';
+    const buttonRow = document.createElement('div');
+    stickyNote.appendChild(buttonRow);
+    buttonRow.classList.add('sticky-note-buttons-row');
 
-        // Clear the form and close the dialog when the "Cancel" button is clicked
-        modifyButton.addEventListener('click', (event) => {
-            openTaskEditForm(toDoItem);
-        });
+    const deleteButton = document.createElement('button');
+    buttonRow.appendChild(deleteButton);
+    deleteButton.textContent = 'Delete';
 
-        // Change Project Select:
-        const inputRowNew = document.createElement('div');
-        inputRowNew.classList.add('input-row');
-        dotsMenu.appendChild(inputRowNew);
+    // Clear the form and close the dialog when the "Cancel" button is clicked
+    deleteButton.addEventListener('click', (event) => {
+        // First delete the task from app
+        app.getProjectByName(toDoItem.project).deleteToDoItem(toDoItem.id);
+        // Second refresh the project page which will reflect the newly updated project without that task
+        // updateTaskBoard(app.getProjectByName(toDoItem.project));
+        updateTaskBoard();
+        updateUpcoming();
+    });
 
-        const changeProjLabel = document.createElement('label');
-        changeProjLabel.textContent = 'Change Project?';
-        changeProjLabel.setAttribute('for', `${toDoItem.task}-change-project`);
-        inputRowNew.appendChild(changeProjLabel);
+    const completeButton = document.createElement('button');
+    buttonRow.appendChild(completeButton);
 
-        const changeProjSelect = document.createElement('select');
-        changeProjSelect.setAttribute('id', `${toDoItem.task}-change-project`);
-        inputRowNew.appendChild(changeProjSelect);
+    if (boardSelect === 'incomplete') {
+        completeButton.textContent = 'Done?';
+    } else {
+        completeButton.textContent = 'Not Done?';
+    }
 
-        const optionChoose = document.createElement('option');
-        changeProjSelect.appendChild(optionChoose);
-        optionChoose.textContent = '--Change Project to--';
-
-        optionChoose.setAttribute('value', 'none');
-
-        const currentProjectIndex = app.getProjectIndexFromId(app.getCurrentProjectId());
-        // Look at all current projects except the current one:
-        for (let i = 0; i < app.projectList.length; i++) {
-            if (i !== currentProjectIndex) {
-                const option = document.createElement('option');
-                changeProjSelect.appendChild(option);
-                option.setAttribute('value', app.projectList[i].name);
-                option.textContent = app.projectList[i].name;
-            }
-        }
-
-        changeProjSelect.addEventListener('change', (event) => {
-            let val = event.target.value;
-            if (val !== 'none') {
-                Project.transferItemBetweenProjects(app.getCurrentDisplayedProject(),
-                    app.getProjectByName(val), toDoItem.id);
-                updateTaskBoard();
-            }
-
-        })
-
-
-        // Delete and Completed Buttons
-
-        const deleteCompleteRow = document.createElement('div');
-        dotsMenu.appendChild(deleteCompleteRow);
-        deleteCompleteRow.classList.add('input-row');
-
-        const deleteButton = document.createElement('button');
-        deleteCompleteRow.appendChild(deleteButton);
-        deleteButton.textContent = 'Delete';
-
-        // Clear the form and close the dialog when the "Cancel" button is clicked
-        deleteButton.addEventListener('click', (event) => {
-            // First delete the task from app
-            app.getProjectByName(toDoItem.project).deleteToDoItem(toDoItem.id);
-            // Second refresh the project page which will reflect the newly updated project without that task
-            // updateTaskBoard(app.getProjectByName(toDoItem.project));
-            updateTaskBoard();
-            updateUpcoming();
-        });
-
-        const completeButton = document.createElement('button');
-        deleteCompleteRow.appendChild(completeButton);
-
-        if (boardSelect === 'incomplete') {
-            completeButton.textContent = 'Mark as Complete?';
-        } else {
-            completeButton.textContent = 'Reset as incomplete?';
-        }
-
-        completeButton.addEventListener('click', (event) => {
-            // Toggle its completeness state.
-            toDoItem.completeStatus = !toDoItem.completeStatus;
-            // Then refresh the display to reflect the item's new status: 
-            updateTaskBoard();
-            updateUpcoming();
-        })
-        dotsMenu.addEventListener('mouseleave', (event) => {
-            dotsMenu.remove();
-
-        });
+    completeButton.addEventListener('click', (event) => {
+        // Toggle its completeness state.
+        toDoItem.completeStatus = !toDoItem.completeStatus;
+        // Then refresh the display to reflect the item's new status: 
+        updateTaskBoard();
+        updateUpcoming();
     })
+
+
+
+    // Modify 
+    const modifyButton = document.createElement('button');
+    buttonRow.appendChild(modifyButton);
+    modifyButton.textContent = 'Edit';
+
+    modifyButton.addEventListener('click', (event) => {
+        openTaskEditForm(toDoItem);
+    });
+
+
+    // const expandDotsButton = document.createElement('button');
+    // expandDotsButton.classList.add('expand-dots-button');
+    // stickyNote.appendChild(expandDotsButton);
+
+    // expandDotsButton.addEventListener('click', (event) => {
+    //     // open dotsmenu
+    //     const dotsMenu = document.createElement('div');
+    //     stickyNote.appendChild(dotsMenu);
+    //     dotsMenu.classList.add('dots-menu');
+
+
+
+    //     // Change Project Select:
+    //     const inputRowNew = document.createElement('div');
+    //     inputRowNew.classList.add('input-row');
+    //     dotsMenu.appendChild(inputRowNew);
+
+    //     const changeProjLabel = document.createElement('label');
+    //     changeProjLabel.textContent = 'Change Project?';
+    //     changeProjLabel.setAttribute('for', `${toDoItem.task}-change-project`);
+    //     inputRowNew.appendChild(changeProjLabel);
+
+    //     const changeProjSelect = document.createElement('select');
+    //     changeProjSelect.setAttribute('id', `${toDoItem.task}-change-project`);
+    //     inputRowNew.appendChild(changeProjSelect);
+
+    //     const optionChoose = document.createElement('option');
+    //     changeProjSelect.appendChild(optionChoose);
+    //     optionChoose.textContent = '--Change Project to--';
+
+    //     optionChoose.setAttribute('value', 'none');
+
+    //     const currentProjectIndex = app.getProjectIndexFromId(app.getCurrentProjectId());
+    //     // Look at all current projects except the current one:
+    //     for (let i = 0; i < app.projectList.length; i++) {
+    //         if (i !== currentProjectIndex) {
+    //             const option = document.createElement('option');
+    //             changeProjSelect.appendChild(option);
+    //             option.setAttribute('value', app.projectList[i].name);
+    //             option.textContent = app.projectList[i].name;
+    //         }
+    //     }
+
+    //     changeProjSelect.addEventListener('change', (event) => {
+    //         let val = event.target.value;
+    //         if (val !== 'none') {
+    //             Project.transferItemBetweenProjects(app.getCurrentDisplayedProject(),
+    //                 app.getProjectByName(val), toDoItem.id);
+    //             updateTaskBoard();
+    //         }
+
+    //     })
+
+
+    //     dotsMenu.addEventListener('mouseleave', (event) => {
+    //         dotsMenu.remove();
+
+    //     });
+
+
+    // })
 
 
 };
@@ -293,11 +303,12 @@ function updateUpcoming() {
         const taskName = document.createElement('span');
         upcomingContainer.appendChild(taskName);
         taskName.textContent = thisToDoItem.task;
+        taskName.classList.add('upcoming-task-name');
 
         const projName = document.createElement('span');
         upcomingContainer.appendChild(projName);
         projName.textContent = `, ${thisToDoItem.project},`;
-
+        projName.classList.add('upcoming-project-name');
         if (thisToDoItem.deadline) {
             const dueDate = document.createElement('span');
             upcomingContainer.appendChild(dueDate);
