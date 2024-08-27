@@ -1,7 +1,7 @@
-import { format, compareAsc } from "date-fns";
+import { format} from "date-fns";
 import { app } from './app.js';
 import { ToDoItem } from './ToDoItem.js';
-import { updateTaskBoard,updateUpcoming } from './taskBoardFunctions.js';
+import { updateTaskBoard,updateUpcoming } from './contentFunctions.js';
 
 
 function createTaskForm() {

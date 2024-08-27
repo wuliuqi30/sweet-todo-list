@@ -1,4 +1,3 @@
-import { format, compareAsc } from "date-fns";
 class ToDoItem {
 
     #creationTime;
@@ -19,13 +18,6 @@ class ToDoItem {
 
     constructor(task = 'task', description = '', deadline = null, priority = 1) {
 
-        // if (id < 0) {
-        //     console.log(`You are attempting to create an item with a negative id (${id}), which is not allowed. Automatically setting its ID to 0.`);
-        //     this.#constructorWarningFlag = true;
-        //     this.#constructorWarningInfo = 'Attemped to create object with negative ID';
-        //     id = 0;
-        // }
-
         if (this.#invalidPriority(priority)) {
             console.log('The priority was not one of the three allowed priorities of normal, high, or urgent. Automatically setting it to normal.')
             this.#constructorWarningFlag = true;
@@ -34,10 +26,7 @@ class ToDoItem {
         }
 
         this.#task = task;
-        // this.#id = id;
         this.#description = description;
-
-        // const dateRegex = /^\d{4}-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01])$/;
 
         if (deadline instanceof Date) {
             this.#deadline = deadline; // input is a Date object
@@ -56,12 +45,8 @@ class ToDoItem {
 
     // Check for invalid inputs:
     #invalidPriority(pr) {
-        //  return ((pr !== 'normal') && (pr !== 'high') && (pr !== 'urgent'));
         return pr < 1;
     }
-
-    // Need to check for a valid deadline time format: 
-
 
     // Age of item:
     get creationTime() {
@@ -87,9 +72,6 @@ class ToDoItem {
     set ageInMs(age) {
         this.#ageInMs = age;
     }
-
-
-    // Edit the item later: 
 
     set task(taskIn) {
         this.#task = taskIn;

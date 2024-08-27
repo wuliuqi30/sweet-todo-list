@@ -1,9 +1,5 @@
 import { Project } from './Project.js';
 import { getRandomColor } from './general-functions.js';
-import { createTaskForm, createCloseTaskFormEventListener } from './taskFormFunctions.js';
-import { createProjectForm, createProjectFormEventListener } from './projectFormFunctions.js';
-import { updateTaskBoard, updateProjectDisplay } from './taskBoardFunctions.js';
-
 import { format, compareAsc } from "date-fns";
 import { ToDoItem } from './ToDoItem.js';
 
@@ -121,13 +117,6 @@ const app = (function () {
         // n: any integer greater than 0
         // whichProjects: either 'all' or a specific project name
 
-
-        // Put all tasks in one giant list:
-        // if (whichProjects !== 'all'){
-        //     // Get n most pressing tasks of this particular project.
-        //     const thisProj = getProjectByName(whichProjects);
-        // }
-
         // For now, return from all projects. Later can implement individual projects:
         let taskArray = getAllTasks();
         console.log('All tasks');
@@ -139,17 +128,6 @@ const app = (function () {
         console.log('All tasks (sorted):')
         console.table(filteredByNull);
         let filteredByCompletionArray = filteredByNull.filter(item=>!item.completeStatus);
-        // const dates = [
-        //   new Date(1995, 6, 2),
-        //   new Date(1987, 1, 11),
-        //   new Date(1989, 6, 10),
-        // ];
-        // console.log(dates.sort(compareAsc));
-        // //=> [
-        // //   Wed Feb 11 1987 00:00:00,
-        // //   Mon Jul 10 1989 00:00:00,
-        // //   Sun Jul 02 1995 00:00:00
-        // // 
         let returnVal = null;
 
         // If there was any result from the filtering, return that. if not, returns null.
@@ -180,7 +158,7 @@ const app = (function () {
                 if (!deadline){
                     deadline = null;
                 } else {
-                    deadline = new Date(Number(deadline.slice(0,4)),Number(deadline.slice(5,7)),Number(deadline.slice(8,10)));
+                    deadline = new Date(Number(deadline.slice(0,4)),Number(deadline.slice(5,7))-1,Number(deadline.slice(8,10)));
                 }
                 const creationTime = thisTask.creationTime;
 
@@ -192,7 +170,7 @@ const app = (function () {
                 );
                 
                 newToDoItem.id = thisTask.id;
-                newToDoItem.creationTime = new Date(Number(creationTime.slice(0,4)),Number(creationTime.slice(5,7)),Number(creationTime.slice(8,10)));
+                newToDoItem.creationTime = new Date(Number(creationTime.slice(0,4)),Number(creationTime.slice(5,7))-1,Number(creationTime.slice(8,10)));
                 newToDoItem.priorityName = thisTask.priorityName;
                 newToDoItem.project = thisTask.project;
 

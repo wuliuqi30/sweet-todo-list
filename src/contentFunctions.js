@@ -1,4 +1,3 @@
-import { getRandomColor } from './general-functions.js';
 import { app } from './app.js';
 import { Project } from './Project.js';
 import { sizeParams } from './globals.js';
@@ -72,11 +71,7 @@ function updateTaskBoard() {
         const toDoItem = completeItems[i];
         addStickyNoteToTaskBoard(toDoItem, 'completed');
     }
-
-
-
 }
-
 
 function addStickyNoteToTaskBoard(toDoItem, boardSelect) {
 
@@ -178,52 +173,46 @@ function addStickyNoteToTaskBoard(toDoItem, boardSelect) {
         })
 
 
-            // Delete and Completed Buttons
+        // Delete and Completed Buttons
 
-    const deleteCompleteRow = document.createElement('div');
-    dotsMenu.appendChild(deleteCompleteRow);
-    deleteCompleteRow.classList.add('input-row');
+        const deleteCompleteRow = document.createElement('div');
+        dotsMenu.appendChild(deleteCompleteRow);
+        deleteCompleteRow.classList.add('input-row');
 
-    const deleteButton = document.createElement('button');
-    deleteCompleteRow.appendChild(deleteButton);
-    deleteButton.textContent = 'Delete';
+        const deleteButton = document.createElement('button');
+        deleteCompleteRow.appendChild(deleteButton);
+        deleteButton.textContent = 'Delete';
 
-    // Clear the form and close the dialog when the "Cancel" button is clicked
-    deleteButton.addEventListener('click', (event) => {
-        // First delete the task from app
-        app.getProjectByName(toDoItem.project).deleteToDoItem(toDoItem.id);
-        // Second refresh the project page which will reflect the newly updated project without that task
-        // updateTaskBoard(app.getProjectByName(toDoItem.project));
-        updateTaskBoard();
-        updateUpcoming();
-    });
+        // Clear the form and close the dialog when the "Cancel" button is clicked
+        deleteButton.addEventListener('click', (event) => {
+            // First delete the task from app
+            app.getProjectByName(toDoItem.project).deleteToDoItem(toDoItem.id);
+            // Second refresh the project page which will reflect the newly updated project without that task
+            // updateTaskBoard(app.getProjectByName(toDoItem.project));
+            updateTaskBoard();
+            updateUpcoming();
+        });
 
-    const completeButton = document.createElement('button');
-    deleteCompleteRow.appendChild(completeButton);
+        const completeButton = document.createElement('button');
+        deleteCompleteRow.appendChild(completeButton);
 
-    if (boardSelect === 'incomplete') {
-        completeButton.textContent = 'Mark as Complete?';
-    } else {
-        completeButton.textContent = 'Reset as incomplete?';
-    }
+        if (boardSelect === 'incomplete') {
+            completeButton.textContent = 'Mark as Complete?';
+        } else {
+            completeButton.textContent = 'Reset as incomplete?';
+        }
 
-    completeButton.addEventListener('click', (event) => {
-        // Toggle its completeness state.
-        toDoItem.completeStatus = !toDoItem.completeStatus;
-        // Then refresh the display to reflect the item's new status: 
-        updateTaskBoard();
-        updateUpcoming();
-    })
-
-
-
+        completeButton.addEventListener('click', (event) => {
+            // Toggle its completeness state.
+            toDoItem.completeStatus = !toDoItem.completeStatus;
+            // Then refresh the display to reflect the item's new status: 
+            updateTaskBoard();
+            updateUpcoming();
+        })
         dotsMenu.addEventListener('mouseleave', (event) => {
             dotsMenu.remove();
 
         });
-
-
-
     })
 
 
@@ -315,14 +304,6 @@ function updateUpcoming() {
             dueDate.textContent = ` Due ${format(thisToDoItem.deadline, "MM/dd/yyyy")}`;
         }
 
-        // projectButton.addEventListener('click', (event) => {
-        //     // Refresh the task display
-        //     app.setCurrentProjectId(thisProj.id);
-        //     const projectsAll = document.querySelectorAll('.project-nav-button');
-        //     projectsAll.forEach(button => button.classList.remove('current-project'));
-        //     event.target.classList.add('current-project');
-        //     updateTaskBoard();
-        // });
     }
 }
 

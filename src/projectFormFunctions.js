@@ -1,6 +1,7 @@
 import { app } from './app.js';
 import { updateTaskForm } from './taskFormFunctions.js';
-import {updateProjectDisplay} from './taskBoardFunctions.js';
+import {updateProjectDisplay} from './contentFunctions.js';
+
 // Create a new project form.
 function createProjectForm(){
 
