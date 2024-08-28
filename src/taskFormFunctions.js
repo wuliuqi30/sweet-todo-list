@@ -170,6 +170,10 @@ function updateProjectListSelect() {
         option.textContent = app.projectList[i].name;
     }
 
+    // Change the default selectd index to the current project
+    const currentProjIndex = app.getProjectIndexFromId(app.getCurrentProjectId());
+    selectNew.selectedIndex = currentProjIndex;
+
 }
 
 function openTaskEditForm(prefillToDoItem) {
@@ -290,7 +294,7 @@ function createTaskCloseFormProcessing() {
   
     app.printState();
     // updateTaskBoard(app.getProjectByName(projectFromForm.value));
-    updateTaskBoard(app.getProjectById(app.getCurrentProjectId()));
+    updateTaskBoard('incomplete');
     updateUpcoming();
   }
 

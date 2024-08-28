@@ -125,4 +125,22 @@ Future:
 - Search bar actually works and finds the task
 - To do items in the main display are clickable which highlights them 
 and potentially pulls up a small display with options to complete, delete, move, or edit.
+- check out others and get ideas for features to add: 
 
+ideas: 
+- no separate completed/non completed section, just one sectoin, but a button that allows
+you to view completed tasks. and completed tasks will have a slight greyed outness to them. done
+- project view section has a button for displayed completed tasks. done
+- project view has a title on top for "Remaining tasks" vs. "copmleted tasks" done 
+- mark completed tasks with words that say " completed on ..."
+- change font for sticky notes - done
+- get rid of 0's in "due" - done
+- adjust button positiosn on top - done
+- on top add a button for "generate example" as well as "clear everything" with a confirmation  - done
+- projects in project nav on the left-hand side -done
+- project names have a unique font which is reflected everwhere - done
+
+
+8-28: 
+final things to do: 
+put the projects title inside the tasksboard box itself

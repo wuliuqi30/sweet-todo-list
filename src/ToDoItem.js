@@ -6,6 +6,7 @@ class ToDoItem {
     #id;
     #description;
     #deadline; // a Date() object
+    #completionDate;
     #priority; // a positive number: 1 is lowest, 3 is highest
     #priorityName;
     #project;
@@ -140,7 +141,21 @@ class ToDoItem {
     }
 
     set completeStatus(status) {
+        if (this.#complete === status) {
+            this.#modifyWarningFlag = true;
+            this.#modifyWarningInfo = `This item's complete status is ${this.#complete} already!`;
+            return;
+        }
         this.#complete = status;
+        this.#completionDate = new Date();
+    }
+
+    set completionDate(date){
+        this.#completionDate = date;
+    }
+
+    get completionDate(){
+        return this.#completionDate;
     }
 
     get completeStatus() {
@@ -172,6 +187,7 @@ class ToDoItem {
             modifyWarningFlag: this.#modifyWarningFlag, // Set this to true if a mistake may have been made when modifying this item.
             modifyWarningInfo: this.#modifyWarningInfo,
             color: this.#color,
+            completionDate: this.#completionDate,
         }
     }
 

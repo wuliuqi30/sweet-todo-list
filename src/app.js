@@ -1,7 +1,8 @@
 import { Project } from './Project.js';
 import { getRandomColor } from './general-functions.js';
-import { format, compareAsc } from "date-fns";
+import { format, compareAsc, add } from "date-fns";
 import { ToDoItem } from './ToDoItem.js';
+import { refreshEverything } from './contentFunctions.js';
 
 // Nothing in this IIFE will update the display directly.
 const app = (function () {
@@ -58,14 +59,14 @@ const app = (function () {
         }
     }
 
-    const modifyToDoItem = (toDoItemId,projectName, taskName,description,deadline,priority) => {
+    const modifyToDoItem = (toDoItemId, projectName, taskName, description, deadline, priority) => {
         const proj = getProjectByName(projectName);
         const item = getTaskFromId(toDoItemId);
         item.task = taskName;
         item.description = description;
         item.deadline = deadline;
         item.priority = priority;
-        Project.transferItemBetweenProjects( getProjectByName(item.project),proj,toDoItemId);
+        Project.transferItemBetweenProjects(getProjectByName(item.project), proj, toDoItemId);
     }
 
     const getMostRecentTaskId = () => {
@@ -124,16 +125,16 @@ const app = (function () {
         let filteredByNull = taskArray.filter(item => item.deadline)
         console.log('All tasks (filtered by null deadlines but unsorted):')
         console.table(filteredByNull);
-        filteredByNull.sort((a, b) => {return compareAsc(a.deadline, b.deadline)});
+        filteredByNull.sort((a, b) => { return compareAsc(a.deadline, b.deadline) });
         console.log('All tasks (sorted):')
         console.table(filteredByNull);
-        let filteredByCompletionArray = filteredByNull.filter(item=>!item.completeStatus);
+        let filteredByCompletionArray = filteredByNull.filter(item => !item.completeStatus);
         let returnVal = null;
 
         // If there was any result from the filtering, return that. if not, returns null.
-        if (filteredByCompletionArray){
-         returnVal = filteredByCompletionArray.slice(0,n);
-        } 
+        if (filteredByCompletionArray) {
+            returnVal = filteredByCompletionArray.slice(0, n);
+        }
         return returnVal;
     }
 
@@ -143,22 +144,22 @@ const app = (function () {
         projectId = appData.projectId;
         currentProjectDisplayedId = appData.currentProjectDisplayedId;
         // Project
-        for (let p = 0; p<appData.projectList.length; p++){
+        for (let p = 0; p < appData.projectList.length; p++) {
             const thisProj = appData.projectList[p];
             projectList[p] = new Project(thisProj.name);
             projectList[p].id = thisProj.id;
 
             // Tasks in project:
             const tasksList = appData.projectList[p].tasks;
-            for (let t = 0; t < tasksList.length; t ++ ){
+            for (let t = 0; t < tasksList.length; t++) {
                 const thisTask = tasksList[t];
 
-                
+
                 let deadline = thisTask.deadline;
-                if (!deadline){
+                if (!deadline) {
                     deadline = null;
                 } else {
-                    deadline = new Date(Number(deadline.slice(0,4)),Number(deadline.slice(5,7))-1,Number(deadline.slice(8,10)));
+                    deadline = new Date(Number(deadline.slice(0, 4)), Number(deadline.slice(5, 7)) - 1, Number(deadline.slice(8, 10)));
                 }
                 const creationTime = thisTask.creationTime;
 
@@ -168,14 +169,14 @@ const app = (function () {
                     deadline,
                     thisTask.priority
                 );
-                
+
                 newToDoItem.id = thisTask.id;
-                newToDoItem.creationTime = new Date(Number(creationTime.slice(0,4)),Number(creationTime.slice(5,7))-1,Number(creationTime.slice(8,10)));
+                newToDoItem.creationTime = new Date(Number(creationTime.slice(0, 4)), Number(creationTime.slice(5, 7)) - 1, Number(creationTime.slice(8, 10)));
                 newToDoItem.priorityName = thisTask.priorityName;
                 newToDoItem.project = thisTask.project;
 
                 newToDoItem.complete = thisTask.complete;
-                
+                newToDoItem.completionDate = thisTask.completionDate;
                 newToDoItem.constructorWarningFlag = thisTask.constructorWarningFlag; // Set this to true if anything goes wrong in the construction of this object
                 newToDoItem.constructorWarningInfo = thisTask.constructorWarningInfo;
                 newToDoItem.modifyWarningFlag = thisTask.modifyWarningFlag; // Set this to true if a mistake may have been made when modifying this item.
@@ -183,20 +184,68 @@ const app = (function () {
                 newToDoItem.color = thisTask.color;
 
                 projectList[p].addToDoItem(newToDoItem);
-                
+
 
             }
 
         }
-        
+
     }
+
+    const clearAllData = () => {
+        projectList.splice(0, projectList.length);
+        taskId = -1;
+        projectId = -1;
+        currentProjectDisplayedId = 0;
+
+        addProject(new Project('general-tasks'));
+    }
+
+    const loadExample = () => {
+
+        // First clear existing data: 
+        clearAllData();
+
+        const today = new Date();
+        const tomorrow = add(today, { days: 1 });
+        const inTwoDays = add(today, { days: 2 });
+        const inThreeDays = add(today, { days: 3 });
+        const inFourDays = add(today, { days: 4 });
+        const inFiveDays = add(today, { days: 5 });
+        const inSixDays = add(today, { days: 6 });
+        const inSevenDays = add(today, { days: 7 });
+        const inEightDays = add(today, { days: 8 });
+        const inNineDays = add(today, { days: 9 });
+
+        const inTwoWeeks = add(today, { weeks: 2 });
+
+
+
+        addToDoItemToProject(new ToDoItem('bills', 'open the mail and pay the bills', inTwoDays), app.projectList[0].name);
+        addToDoItemToProject(new ToDoItem('cook', 'make breakfast and eat it.', inThreeDays, 2), app.projectList[0].name);
+        addToDoItemToProject(new ToDoItem('clean the bathroom', '', inSevenDays, 1), app.projectList[0].name);
+        addToDoItemToProject(new ToDoItem('yardwork', 'weed the garden', inNineDays, 1), app.projectList[0].name);
+        addToDoItemToProject(new ToDoItem('car', 'fix thing in car', inEightDays, 3), app.projectList[0].name);
+        addToDoItemToProject(new ToDoItem('clean house', 'family visiting in two weeks', inTwoWeeks, 2), app.projectList[0].name);
+        addToDoItemToProject(new ToDoItem('fix light', 'in bathroom', inTwoWeeks, 2), app.projectList[0].name);
+        addProject(new Project('school'));
+        addToDoItemToProject(new ToDoItem('study for physics', 'study chapters 2 and 3', tomorrow, 2), 'school');
+        addToDoItemToProject(new ToDoItem('study for chemistry', 'chaps 34 and 36', tomorrow, 2), 'school');
+        addProject(new Project('work'));
+        addToDoItemToProject(new ToDoItem('fix laptop', 'get computer fixed', inNineDays, 2), 'work');
+        addToDoItemToProject(new ToDoItem('clean work clothes', 'clean and iron shirt and pants', tomorrow, 3), 'work');
+
+        refreshEverything();
+
+    }
+
 
     const toJSON = () => {
         return {
             projectList: projectList,
             taskId: taskId,
-            projectId: projectId, 
-            currentProjectDisplayedId:currentProjectDisplayedId
+            projectId: projectId,
+            currentProjectDisplayedId: currentProjectDisplayedId
         }
     }
 
@@ -218,7 +267,9 @@ const app = (function () {
         modifyToDoItem,
         getTaskFromId,
         toJSON,
-        overwriteFromLocalStorage
+        overwriteFromLocalStorage,
+        clearAllData,
+        loadExample
     }
 })();
 

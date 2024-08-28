@@ -36,7 +36,12 @@ function updateTaskBoard(type = 'incomplete') {
     const taskBoardTitle = document.createElement('div');
     taskBoardTitle.classList.add('task-board-title');
     header.appendChild(taskBoardTitle);
-    taskBoardTitle.textContent = `Project: ${project.name}`;
+    taskBoardTitle.textContent = `Project: `;
+
+    const taskBoardTitleProjectName = document.createElement('span');
+    taskBoardTitle.appendChild(taskBoardTitleProjectName);
+    taskBoardTitleProjectName.textContent = project.name;
+    taskBoardTitleProjectName.classList.add('acme-regular');
 
     // New Task Button
     const newTaskButton = document.createElement('button');
@@ -55,7 +60,7 @@ function updateTaskBoard(type = 'incomplete') {
     toDoBoard.classList.remove('complete-board');
 
     const tasksTitle = document.querySelector('.tasks-board-descriptor');
-    
+
 
     if (type === 'incomplete') {
         tasksTitle.textContent = 'Remaining Tasks: ';
@@ -78,9 +83,30 @@ function updateTaskBoard(type = 'incomplete') {
             addStickyNoteToTaskBoard(toDoItem, 'completed');
         }
     }
+
+   
+    const footerButton = document.querySelector('.toggle-completed-tasks-button');
+
+    if (type === 'incomplete') {
+        footerButton.textContent = 'View Completed Tasks';
+        footerButton.addEventListener('click',(event)=> {
+          
+            updateTaskBoard('completed');
+        })
+    
+    } else {
+        footerButton.textContent = 'View Remaining Tasks';
+        footerButton.addEventListener('click',(event)=> {
+         
+            updateTaskBoard('incomplete');
+        })
+    
+    }
+
+    
 }
 
-function addStickyNoteToTaskBoard(toDoItem, boardSelect) {
+function addStickyNoteToTaskBoard(toDoItem, boardSelect = 'incomplete') {
 
     let taskBoard = null;
     taskBoard = document.querySelector('.tasks-board');
@@ -106,9 +132,15 @@ function addStickyNoteToTaskBoard(toDoItem, boardSelect) {
     const deadline = document.createElement('p');
     stickyNote.appendChild(deadline);
     if (toDoItem.deadline) {
-        deadline.textContent = `Due ${format(toDoItem.deadline, "MM/dd/yyyy")}`;
+        deadline.textContent = `due ${format(toDoItem.deadline, "M/d/yyyy")}`;
+       
     }
-
+    if (boardSelect !== 'incomplete') {
+        deadline.style.textDecoration = 'line-through';
+        const completedDate = document.createElement('p');
+        stickyNote.appendChild(completedDate);
+        completedDate.textContent = `completed on ${format(toDoItem.completionDate, "M/d/yyyy")}`
+    }
 
     const priority = document.createElement('p');
     stickyNote.appendChild(priority);
@@ -143,6 +175,7 @@ function addStickyNoteToTaskBoard(toDoItem, boardSelect) {
         completeButton.textContent = 'Done?';
     } else {
         completeButton.textContent = 'Not Done?';
+        deadline.style.textDecoration = 'line-through';
     }
 
     completeButton.addEventListener('click', (event) => {
@@ -248,8 +281,9 @@ function updateProjectDisplay() {
 
     const newProjButton = document.createElement('button');
     navHeader.appendChild(newProjButton);
-    newProjButton.textContent = 'New';
+    newProjButton.textContent = 'New Project';
     newProjButton.classList.add('new-project-button');
+    
 
     newProjButton.addEventListener('click', (event) => {
         openProjectEditForm();
@@ -261,6 +295,7 @@ function updateProjectDisplay() {
         const projectButton = document.createElement('button');
         projectButton.classList.add('project-nav-button');
         projectButton.textContent = thisProj.name;
+        projectButton.classList.add('acme-regular');
         // projectButton.style.width = `${sizeParams.projectBarWidth}px`;
         projectNavigation.appendChild(projectButton);
         projectButton.addEventListener('click', (event) => {
@@ -304,17 +339,18 @@ function updateUpcoming() {
 
         const taskName = document.createElement('span');
         upcomingContainer.appendChild(taskName);
-        taskName.textContent = thisToDoItem.task;
+        taskName.textContent = `${thisToDoItem.task}, `;
         taskName.classList.add('upcoming-task-name');
 
         const projName = document.createElement('span');
         upcomingContainer.appendChild(projName);
-        projName.textContent = `, ${thisToDoItem.project},`;
+        projName.textContent = `${thisToDoItem.project}`;
         projName.classList.add('upcoming-project-name');
+        projName.classList.add('acme-regular');
         if (thisToDoItem.deadline) {
             const dueDate = document.createElement('span');
             upcomingContainer.appendChild(dueDate);
-            dueDate.textContent = ` Due ${format(thisToDoItem.deadline, "MM/dd/yyyy")}`;
+            dueDate.textContent = `, due ${format(thisToDoItem.deadline, "MM/dd/yyyy")}`;
         }
 
     }
