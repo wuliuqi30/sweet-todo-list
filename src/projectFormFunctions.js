@@ -13,7 +13,7 @@ function createProjectForm(){
     body.appendChild(dialog);
     const title = document.createElement('p');
     dialog.appendChild(title);
-    title.textContent = 'Create a new project.';
+    title.textContent = 'Create a new project:';
     const fieldSet = document.createElement('fieldset');
     dialog.appendChild(fieldSet);
     const form = document.createElement('form');

@@ -3,7 +3,7 @@ import {refreshEverything} from './contentFunctions.js';
 
 function createHeader() {
 
-    const header = document.querySelector('.headerBottom');
+    const header = document.querySelector('.header');
     
     // Create the save session button: 
     const saveBtn = document.createElement('button');

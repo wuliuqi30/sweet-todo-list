@@ -21,15 +21,13 @@ function createNewTaskBoard() {
     taskBoard.appendChild(header);
 
     const incompleteBoard = document.createElement('div');
-    incompleteBoard.classList.add('incomplete-tasks-board');
+    incompleteBoard.classList.add('tasks-board');
     taskBoard.appendChild(incompleteBoard);
 
-    const completedBoard = document.createElement('div');
-    completedBoard.classList.add('complete-tasks-board');
-    taskBoard.appendChild(completedBoard);
+
 }
 
-function updateTaskBoard() {
+function updateTaskBoard(type = 'incomplete') {
 
     const project = app.getCurrentDisplayedProject();
     const header = document.querySelector('.tasks-header');
@@ -38,7 +36,7 @@ function updateTaskBoard() {
     const taskBoardTitle = document.createElement('div');
     taskBoardTitle.classList.add('task-board-title');
     header.appendChild(taskBoardTitle);
-    taskBoardTitle.textContent = project.name;
+    taskBoardTitle.textContent = `Project: ${project.name}`;
 
     // New Task Button
     const newTaskButton = document.createElement('button');
@@ -50,38 +48,42 @@ function updateTaskBoard() {
         openTaskEditForm();
     });
 
-    // Update incomplete tasks board
 
-    const incompleteBoard = document.querySelector('.incomplete-tasks-board');
-    incompleteBoard.innerHTML = '';
+    const toDoBoard = document.querySelector('.tasks-board');
+    toDoBoard.innerHTML = '';
+    toDoBoard.classList.remove('incomplete-board');
+    toDoBoard.classList.remove('complete-board');
 
-    const incompleteItems = project.incompleteItems;
+    const tasksTitle = document.querySelector('.tasks-board-descriptor');
+    
 
-    for (let i = 0; i < incompleteItems.length; i++) {
-        const toDoItem = incompleteItems[i];
-        addStickyNoteToTaskBoard(toDoItem, 'incomplete');
-    }
+    if (type === 'incomplete') {
+        tasksTitle.textContent = 'Remaining Tasks: ';
+        // Update incomplete tasks board
+        toDoBoard.classList.add('incomplete-board');
+        const incompleteItems = project.incompleteItems;
 
-    // Update completed tasks board
-    const completedBoard = document.querySelector('.complete-tasks-board');
-    completedBoard.innerHTML = '';
+        for (let i = 0; i < incompleteItems.length; i++) {
+            const toDoItem = incompleteItems[i];
+            addStickyNoteToTaskBoard(toDoItem, 'incomplete');
+        }
+    } else {
+        tasksTitle.textContent = 'Completed Tasks: ';
+        // Update completed tasks board
+        toDoBoard.classList.add('complete-board');
+        const completeItems = project.completedItems;
 
-    const completeItems = project.completedItems;
-
-    for (let i = 0; i < completeItems.length; i++) {
-        const toDoItem = completeItems[i];
-        addStickyNoteToTaskBoard(toDoItem, 'completed');
+        for (let i = 0; i < completeItems.length; i++) {
+            const toDoItem = completeItems[i];
+            addStickyNoteToTaskBoard(toDoItem, 'completed');
+        }
     }
 }
 
 function addStickyNoteToTaskBoard(toDoItem, boardSelect) {
 
     let taskBoard = null;
-    if (boardSelect === 'incomplete') {
-        taskBoard = document.querySelector('.incomplete-tasks-board');
-    } else {
-        taskBoard = document.querySelector('.complete-tasks-board');
-    }
+    taskBoard = document.querySelector('.tasks-board');
 
 
     // Create the sticky note
