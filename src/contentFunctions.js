@@ -28,7 +28,7 @@ function createNewTaskBoard() {
 }
 
 function updateTaskBoard(type = 'incomplete') {
-
+    // or type could be 'completed'
     const project = app.getCurrentDisplayedProject();
     const header = document.querySelector('.tasks-header');
     header.innerHTML = '';
@@ -36,7 +36,7 @@ function updateTaskBoard(type = 'incomplete') {
     const taskBoardTitle = document.createElement('div');
     taskBoardTitle.classList.add('task-board-title');
     header.appendChild(taskBoardTitle);
-    taskBoardTitle.textContent = `Project: `;
+    // taskBoardTitle.textContent = `Project: `;
 
     const taskBoardTitleProjectName = document.createElement('span');
     taskBoardTitle.appendChild(taskBoardTitleProjectName);
@@ -84,26 +84,24 @@ function updateTaskBoard(type = 'incomplete') {
         }
     }
 
-   
     const footerButton = document.querySelector('.toggle-completed-tasks-button');
 
     if (type === 'incomplete') {
         footerButton.textContent = 'View Completed Tasks';
-        footerButton.addEventListener('click',(event)=> {
-          
+        footerButton.addEventListener('click', (event) => {
+
             updateTaskBoard('completed');
         })
-    
+
     } else {
         footerButton.textContent = 'View Remaining Tasks';
-        footerButton.addEventListener('click',(event)=> {
-         
+        footerButton.addEventListener('click', (event) => {
+
             updateTaskBoard('incomplete');
         })
-    
+
     }
 
-    
 }
 
 function addStickyNoteToTaskBoard(toDoItem, boardSelect = 'incomplete') {
@@ -129,11 +127,13 @@ function addStickyNoteToTaskBoard(toDoItem, boardSelect = 'incomplete') {
     if (toDoItem.description) {
         descrip.textContent = toDoItem.description;
     }
+    descrip.style.overflowX = 'auto';
+
     const deadline = document.createElement('p');
     stickyNote.appendChild(deadline);
     if (toDoItem.deadline) {
         deadline.textContent = `due ${format(toDoItem.deadline, "M/d/yyyy")}`;
-       
+
     }
     if (boardSelect !== 'incomplete') {
         deadline.style.textDecoration = 'line-through';
@@ -180,13 +180,17 @@ function addStickyNoteToTaskBoard(toDoItem, boardSelect = 'incomplete') {
 
     completeButton.addEventListener('click', (event) => {
         // Toggle its completeness state.
+        let boardState = toDoItem.completeStatus; // current status of the board
         toDoItem.completeStatus = !toDoItem.completeStatus;
         // Then refresh the display to reflect the item's new status: 
-        updateTaskBoard();
+        if (!boardState) {
+            updateTaskBoard('incomplete');
+
+        } else {
+            updateTaskBoard('completed');
+        }
         updateUpcoming();
     })
-
-
 
     // Modify 
     const modifyButton = document.createElement('button');
@@ -196,70 +200,6 @@ function addStickyNoteToTaskBoard(toDoItem, boardSelect = 'incomplete') {
     modifyButton.addEventListener('click', (event) => {
         openTaskEditForm(toDoItem);
     });
-
-
-    // const expandDotsButton = document.createElement('button');
-    // expandDotsButton.classList.add('expand-dots-button');
-    // stickyNote.appendChild(expandDotsButton);
-
-    // expandDotsButton.addEventListener('click', (event) => {
-    //     // open dotsmenu
-    //     const dotsMenu = document.createElement('div');
-    //     stickyNote.appendChild(dotsMenu);
-    //     dotsMenu.classList.add('dots-menu');
-
-
-
-    //     // Change Project Select:
-    //     const inputRowNew = document.createElement('div');
-    //     inputRowNew.classList.add('input-row');
-    //     dotsMenu.appendChild(inputRowNew);
-
-    //     const changeProjLabel = document.createElement('label');
-    //     changeProjLabel.textContent = 'Change Project?';
-    //     changeProjLabel.setAttribute('for', `${toDoItem.task}-change-project`);
-    //     inputRowNew.appendChild(changeProjLabel);
-
-    //     const changeProjSelect = document.createElement('select');
-    //     changeProjSelect.setAttribute('id', `${toDoItem.task}-change-project`);
-    //     inputRowNew.appendChild(changeProjSelect);
-
-    //     const optionChoose = document.createElement('option');
-    //     changeProjSelect.appendChild(optionChoose);
-    //     optionChoose.textContent = '--Change Project to--';
-
-    //     optionChoose.setAttribute('value', 'none');
-
-    //     const currentProjectIndex = app.getProjectIndexFromId(app.getCurrentProjectId());
-    //     // Look at all current projects except the current one:
-    //     for (let i = 0; i < app.projectList.length; i++) {
-    //         if (i !== currentProjectIndex) {
-    //             const option = document.createElement('option');
-    //             changeProjSelect.appendChild(option);
-    //             option.setAttribute('value', app.projectList[i].name);
-    //             option.textContent = app.projectList[i].name;
-    //         }
-    //     }
-
-    //     changeProjSelect.addEventListener('change', (event) => {
-    //         let val = event.target.value;
-    //         if (val !== 'none') {
-    //             Project.transferItemBetweenProjects(app.getCurrentDisplayedProject(),
-    //                 app.getProjectByName(val), toDoItem.id);
-    //             updateTaskBoard();
-    //         }
-
-    //     })
-
-
-    //     dotsMenu.addEventListener('mouseleave', (event) => {
-    //         dotsMenu.remove();
-
-    //     });
-
-
-    // })
-
 
 };
 
@@ -283,7 +223,7 @@ function updateProjectDisplay() {
     navHeader.appendChild(newProjButton);
     newProjButton.textContent = 'New Project';
     newProjButton.classList.add('new-project-button');
-    
+
 
     newProjButton.addEventListener('click', (event) => {
         openProjectEditForm();
@@ -296,6 +236,9 @@ function updateProjectDisplay() {
         projectButton.classList.add('project-nav-button');
         projectButton.textContent = thisProj.name;
         projectButton.classList.add('acme-regular');
+        if (p < 1) {
+            projectButton.classList.add('current-project'); // default select the first one
+        }
         // projectButton.style.width = `${sizeParams.projectBarWidth}px`;
         projectNavigation.appendChild(projectButton);
         projectButton.addEventListener('click', (event) => {
@@ -337,6 +280,12 @@ function updateUpcoming() {
         upcomingDisplay.appendChild(upcomingContainer);
         upcomingContainer.classList.add('upcoming-item');
 
+        if (thisToDoItem.deadline) {
+            const dueDate = document.createElement('span');
+            upcomingContainer.appendChild(dueDate);
+            dueDate.textContent = `${format(thisToDoItem.deadline, "MM/dd/yyyy")}: `;
+        }
+
         const taskName = document.createElement('span');
         upcomingContainer.appendChild(taskName);
         taskName.textContent = `${thisToDoItem.task}, `;
@@ -347,11 +296,7 @@ function updateUpcoming() {
         projName.textContent = `${thisToDoItem.project}`;
         projName.classList.add('upcoming-project-name');
         projName.classList.add('acme-regular');
-        if (thisToDoItem.deadline) {
-            const dueDate = document.createElement('span');
-            upcomingContainer.appendChild(dueDate);
-            dueDate.textContent = `, due ${format(thisToDoItem.deadline, "MM/dd/yyyy")}`;
-        }
+
 
     }
 }

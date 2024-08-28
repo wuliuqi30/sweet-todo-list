@@ -120,14 +120,14 @@ const app = (function () {
 
         // For now, return from all projects. Later can implement individual projects:
         let taskArray = getAllTasks();
-        console.log('All tasks');
-        console.table(taskArray);
+        // console.log('All tasks');
+        // console.table(taskArray);
         let filteredByNull = taskArray.filter(item => item.deadline)
-        console.log('All tasks (filtered by null deadlines but unsorted):')
-        console.table(filteredByNull);
+        // console.log('All tasks (filtered by null deadlines but unsorted):')
+        // console.table(filteredByNull);
         filteredByNull.sort((a, b) => { return compareAsc(a.deadline, b.deadline) });
-        console.log('All tasks (sorted):')
-        console.table(filteredByNull);
+        // console.log('All tasks (sorted):')
+        // console.table(filteredByNull);
         let filteredByCompletionArray = filteredByNull.filter(item => !item.completeStatus);
         let returnVal = null;
 
@@ -224,16 +224,18 @@ const app = (function () {
         addToDoItemToProject(new ToDoItem('bills', 'open the mail and pay the bills', inTwoDays), app.projectList[0].name);
         addToDoItemToProject(new ToDoItem('cook', 'make breakfast and eat it.', inThreeDays, 2), app.projectList[0].name);
         addToDoItemToProject(new ToDoItem('clean the bathroom', '', inSevenDays, 1), app.projectList[0].name);
-        addToDoItemToProject(new ToDoItem('yardwork', 'weed the garden', inNineDays, 1), app.projectList[0].name);
+        addToDoItemToProject(new ToDoItem('yardwork', 'weed the garden, fix the garage door, put down mulch, clean the pool, rake the yard, clean the grill, fix the lawnmower then mow the lawn', inNineDays, 1), app.projectList[0].name);
         addToDoItemToProject(new ToDoItem('car', 'fix thing in car', inEightDays, 3), app.projectList[0].name);
         addToDoItemToProject(new ToDoItem('clean house', 'family visiting in two weeks', inTwoWeeks, 2), app.projectList[0].name);
         addToDoItemToProject(new ToDoItem('fix light', 'in bathroom', inTwoWeeks, 2), app.projectList[0].name);
         addProject(new Project('school'));
         addToDoItemToProject(new ToDoItem('study for physics', 'study chapters 2 and 3', tomorrow, 2), 'school');
         addToDoItemToProject(new ToDoItem('study for chemistry', 'chaps 34 and 36', tomorrow, 2), 'school');
+        addToDoItemToProject(new ToDoItem('study for english', 'read the great gatsby', inSixDays, 2), 'school');
         addProject(new Project('work'));
-        addToDoItemToProject(new ToDoItem('fix laptop', 'get computer fixed', inNineDays, 2), 'work');
+        addToDoItemToProject(new ToDoItem('fix laptop', 'get computer', inNineDays, 2), 'work');
         addToDoItemToProject(new ToDoItem('clean work clothes', 'clean and iron shirt and pants', tomorrow, 3), 'work');
+        addToDoItemToProject(new ToDoItem('send memo', 'dont forget too cc mary', inFourDays, 3), 'work');
 
         refreshEverything();
 

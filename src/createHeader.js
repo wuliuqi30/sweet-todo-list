@@ -1,10 +1,17 @@
 import { loadAllDataFromLocalStorage, saveAllDataToLocalStorage } from './localStorageFiles.js';
 import { refreshEverything } from './contentFunctions.js';
+import { format, compareAsc } from "date-fns";
 
 function createHeader() {
 
     const header = document.querySelector('.header');
-
+    const profileBox = document.querySelector('.profile-box');
+    // Today's Date: 
+    const headerDate = document.createElement('p');
+    headerDate.textContent = ` Today's Date: ${format(new Date(),"M/d/yyyy")}`;
+    profileBox.appendChild(headerDate);
+    headerDate.classList.add("profile-name");
+    
     // Create the save session button: 
     const saveBtn = document.createElement('button');
     header.appendChild(saveBtn);
@@ -13,6 +20,7 @@ function createHeader() {
 
     saveBtn.addEventListener('click', (event) => {
         saveAllDataToLocalStorage();
+        alert('Data Saved!');
     });
 
     // Create the reload session button: 

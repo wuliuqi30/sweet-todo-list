@@ -150,10 +150,12 @@ class Project {
             // projectA.viewList();
             // console.log('Project B before transfer:')
             // projectB.viewList();
-
+            if (projectA.id === projectB.id){
+                return; // do nothing
+            } else {
             projectB.addToDoItem(projectA.getItem(itemIdInA));
             projectA.deleteToDoItem(itemIdInA);
-
+        }
             // console.log('Project A after transfer:')
             // projectA.viewList();
             // console.log('Project B after transfer:')

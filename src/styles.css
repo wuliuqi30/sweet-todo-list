@@ -55,11 +55,11 @@ h6 {
 
     font-size: 16px;
 
-    --sticky-note-font-size: 0.9rem;
+    --sticky-note-font-size: 1rem;
     --todoitems-grid-gap: 15px;
     --sticky-note-width: 220px;
     --sticky-note-height: 220px;
-    
+
 
     --expand-dots-button-size: 30px;
     --sticky-note-flap-offset-height: 15px;
@@ -104,42 +104,42 @@ h6 {
     /* All Colors */
 
 
-    --lighter-color:#f1f5f9;
+    --lighter-color: #f1f5f9;
     --lighter-color-font-color: #292524;
 
     --darker-color: #475569;
     --darker-color-font-color: #e2e8f0;
 
-    --super-dark-bg-color:#0f172a;
+    --super-dark-bg-color: #0f172a;
     --super-dark-color: #e2e8f0;
 
-    --save-submit-bg-color:#bef264;
-    --delete-cancel-bg-color:#ea580c;
+    --save-submit-bg-color: #bef264;
+    --delete-cancel-bg-color: #ea580c;
 
-    --project-font-color:var(--super-dark-bg-color);
-    
+    --project-font-color: var(--super-dark-bg-color);
+
 
     --header-section-bg-color: var(--lighter-color);
     --header-section-color: var(--super-dark-bg-color);
 
-    --projects-bg-color:var(--darker-color);
+    --projects-bg-color: var(--darker-color);
     --projects-button-bg-color: var(--lighter-color);
     --projects-button-color: black;
     --projects-nav-title-color: var(--lighter-color);
 
-    --tasks-header-bg-color:var(--darker-color);
+    --tasks-header-bg-color: var(--darker-color);
     --tasks-header-font-color: var(--darker-color-font-color);
 
-    --tasks-header-btn-bg-color:var(--lighter-color);
-    --tasks-header-btn-color:var(--darker-color);
+    --tasks-header-btn-bg-color: var(--lighter-color);
+    --tasks-header-btn-color: var(--darker-color);
 
-    --header-btn-bg-color:var(--darker-color);
-    --header-btn-color:var(--lighter-color);
+    --header-btn-bg-color: var(--darker-color);
+    --header-btn-color: var(--lighter-color);
 
 
 
-    --upcoming-bg-color:var(--super-dark-bg-color);
-    --upcoming-color:var(--super-dark-color);
+    --upcoming-bg-color: var(--super-dark-bg-color);
+    --upcoming-color: var(--super-dark-color);
 
 
     /* --nav-section-bg-color: rgb(40, 142, 201);
@@ -195,13 +195,14 @@ h6 {
 .acme-regular {
     font-family: "New Amsterdam", sans-serif;
     font-weight: 400;
-    font-style: normal;;
+    font-style: normal;
+    ;
 
 
     color: var(--project-font-color);
     letter-spacing: 0.7px;
-  }
-  
+}
+
 
 body {
     display: grid;
@@ -231,20 +232,22 @@ body {
     border-radius: var(--main-block-border-radius);
     border: var(--content-border-px) solid var(--content-border-color);
 
-    display:flex;
+    display: flex;
     gap: 10px;
     align-items: center;
 
 }
 
-.profile-name{
+.profile-name {
     font-size: 2.3rem;
 }
 
-.reload-session-button, 
-.save-session-button, 
-.clear-session-button, 
-.example-session-button{
+
+
+.reload-session-button,
+.save-session-button,
+.clear-session-button,
+.example-session-button {
 
     height: 50px;
     padding: 5px;
@@ -256,17 +259,31 @@ body {
 
 }
 
-.save-session-button{
-    margin-left:auto;
+.save-session-button {
+    margin-left: auto;
     background-color: var(--save-submit-bg-color);
 
 }
 
-.clear-session-button{
+.clear-session-button {
     background-color: var(--delete-cancel-bg-color);
 }
 
+.reload-session-button:hover,
+.save-session-button:hover,
+.clear-session-button:hover,
+.example-session-button:hover {
 
+    height: 50px;
+    padding: 5px;
+    border: 1px solid black;
+
+    font-weight: 800;
+
+    flex: 0 0 auto;
+    transition-duration: 200ms;
+    transform: scale(1.1);
+}
 
 .search-container label {
     display: flex;
@@ -274,11 +291,13 @@ body {
 
     flex: 0 0 auto;
 }
+
 .search-container img {
     display: inline;
     width: var(--search-bar-font-size);
     height: var(--search-bar-font-size);
 }
+
 .search-container input {
     flex: 1 1 auto;
     height: var(--search-bar-height);
@@ -293,6 +312,7 @@ body {
     background-color: var(--search-bar-bg-color);
     font-size: var(--search-bar-font-size);
 }
+
 .upper-right-buttons {
     display: flex;
     width: var(--upper-right-buttons-width);
@@ -303,11 +323,13 @@ body {
     min-height: 90px;
     min-width: 350px;
 }
+
 .upper-right-buttons button {
     border: none;
     background-color: var(--header-section-bg-color);
     margin-left: auto;
 }
+
 .upper-right-buttons a {
     color: var(--main-page-font-color);
     font-size: var(--profile-name-font-size);
@@ -326,6 +348,7 @@ body {
     position: relative;
     top: 10px;
 }
+
 .page-actions button {
     width: 110px;
     height: var(--page-actions-buttons-height);
@@ -340,22 +363,23 @@ body {
 
     transition: 0.2s;
 }
+
 .page-actions button:hover {
     transform: scale(1.1);
 }
 
 /*-------------------------------------- */
 
-button{
+button {
     border-radius: var(--border-radii);
 }
 
-h2{
+h2 {
     font-size: 1.6rem;
     color: var(--projects-nav-title-color);
 }
 
-.project-nav{
+.project-nav {
     background-color: var(--nav-section-bg-color);
     grid-row: 2 / 5;
     font-weight: var(--nav-font-weight);
@@ -371,11 +395,11 @@ h2{
     border: var(--content-border-px) solid var(--content-border-color);
 }
 
-.project-nav-button{
+.project-nav-button {
     padding: 5px;
     font-weight: 500;
     width: 180px;
-    
+
     margin-left: 10px;
 
     font-size: 1.3rem;
@@ -386,8 +410,14 @@ h2{
 
 }
 
+.project-nav-button:hover {
+    transition-duration: 200ms;
+    transform: scale(1.1);
 
-.project-nav-button.current-project{
+}
+
+
+.project-nav-button.current-project {
     padding: 5px;
     font-weight: 900;
 }
@@ -401,15 +431,15 @@ h2{
     font-size: var(--nav-header-size);
 }
 
-.new-project-button{
+.new-project-button {
     background-color: var(--lighter-color);
     margin-left: auto;
     font-size: 1.1rem;
     padding: 4px;
-    
+
 }
 
-.new-project-button:hover{
+.new-project-button:hover {
     transition-duration: 200ms;
     transform: scale(1.05);
 }
@@ -448,9 +478,9 @@ h2{
     background-color: antiquewhite;
 } */
 
-.tasks-board-container{
-    grid-row: 3 / 5;
-    background-image: linear-gradient(45deg, rgb(255, 255, 255) 0%,rgb(204, 204, 208) 100%);
+.tasks-board-container {
+    grid-row: 2 / 5;
+    background-image: linear-gradient(45deg, rgb(255, 255, 255) 0%, rgb(204, 204, 208) 100%);
     border: var(--content-border-px) solid var(--content-border-color);
     padding: 20px;
     border-radius: var(--main-block-border-radius);
@@ -460,15 +490,15 @@ h2{
 
 
 .tasks-header {
-    display:flex;
+    display: flex;
     background-color: var(--tasks-header-bg-color);
     color: var(--tasks-header-font-color);
-    padding: 20px;
+    padding: 10px;
     border-radius: var(--main-block-border-radius);
     border: var(--content-border-px) solid var(--content-border-color);
 }
 
-.tasks-header button{
+.tasks-header button {
     margin-left: auto;
     padding: 4px;
     background-color: var(--tasks-header-btn-bg-color);
@@ -477,17 +507,23 @@ h2{
 }
 
 
-.tasks-header button:hover{
+.tasks-header button:hover {
     transition-duration: 200ms;
     transform: scale(1.05);
 }
 
-.tasks-board-descriptor{
-    
+.tasks-board-descriptor {
+
     color: var(--super-dark-bg-color);
     margin-bottom: 5px;
+    padding: 5px;
 
 }
+
+h3 {
+    font-size: 1.2rem;
+}
+
 
 
 .tasks-board {
@@ -496,52 +532,58 @@ h2{
     grid-template-rows: var(--task-board-grid-height);
     gap: var(--todoitems-grid-gap);
     /* height:100%; */
-    
-    
+
+
     /* background-color: white; */
     overflow-y: auto;
-    
+
 
 }
 
-.toggle-completed-tasks-button{
+.toggle-completed-tasks-button {
     margin-top: auto;
     width: 200px;
-    margin-left:auto;
+    margin-left: auto;
 }
 
-
+.task-board-title .acme-regular {
+    color: inherit;
+    margin-left: 10px;
+    font-size: 2rem;
+}
 
 .sticky-note {
     font-size: var(--sticky-note-font-size);
     width: var(--sticky-note-width);
     height: var(--sticky-note-height);
 
-    display:flex; 
+    display: flex;
     flex-direction: column;
 
     justify-self: center;
     align-self: center;
 
-    border-radius:0px;
+    border-radius: 0px;
 
     position: relative;
 
     font-family: "Kalam", cursive;
-    font-weight: 300;
+    font-weight: 400;
     font-style: normal;
+
+    /* overflow-y:auto; */
 
 }
 
-.sticky-note-completed-marker{
-    position:absolute;
+.sticky-note-completed-marker {
+    position: absolute;
     rotate: 45deg;
 }
 
-.sticky-note.yellow, 
-.sticky-note.blue, 
+.sticky-note.yellow,
+.sticky-note.blue,
 .sticky-note.purple,
-.sticky-note.green{
+.sticky-note.green {
     background-size: cover;
 }
 
@@ -565,16 +607,16 @@ h2{
 .sticky-note p {
     padding: 3px;
 }
- 
-.sticky-note-buttons-row{
-    display:flex;
+
+.sticky-note-buttons-row {
+    display: flex;
     justify-content: space-between;
     margin-top: auto;
     padding: 3px;
 }
 
 
-.sticky-note button{
+.sticky-note button {
     padding: 2px;
     width: 45px;
     text-align: center;
@@ -583,35 +625,44 @@ h2{
     border: 1px solid black;
 }
 
-.sticky-note button:nth-child(2){
+.sticky-note button:nth-child(1) {
     width: 60px;
+    background-color: var(--delete-cancel-bg-color);
 }
 
-.new-task-button{
+
+.sticky-note button:nth-child(2) {
+    width: 60px;
+    background-color: var(--save-submit-bg-color);
+}
+
+
+.new-task-button {
     padding: 2px;
     text-align: center;
     color: #ffffff;
     background-color: var(--projects-bg-color);
     border: 1px solid black;
+    margin-right: 10px;
 }
 
-.sticky-note .expand-dots-button{
+.sticky-note .expand-dots-button {
     background-image: url("./icons/menu.svg");
     background-size: cover;
     position: absolute;
-    width: var( --expand-dots-button-size);
-    height: var( --expand-dots-button-size);
-    left: calc(var(--sticky-note-width) - (var(--sticky-note-flap-offset-width)) - var(--expand-dots-button-size) / 2 );
-    top: calc(var(--sticky-note-height) - (var(--sticky-note-flap-offset-height)) - var(--expand-dots-button-size) / 2 );
-    border:none;
+    width: var(--expand-dots-button-size);
+    height: var(--expand-dots-button-size);
+    left: calc(var(--sticky-note-width) - (var(--sticky-note-flap-offset-width)) - var(--expand-dots-button-size) / 2);
+    top: calc(var(--sticky-note-height) - (var(--sticky-note-flap-offset-height)) - var(--expand-dots-button-size) / 2);
+    border: none;
     background-color: transparent;
-} 
+}
 
-.dots-menu{
+.dots-menu {
     position: absolute;
     left: calc(var(--sticky-note-width) * .75);
     top: 0px;
-    background-color:var(--lighter-color);
+    background-color: var(--lighter-color);
     color: var(--lighter-color-font-color);
     border: 2px solid var(--lighter-color-font-color);
     width: 250px;
@@ -620,10 +671,10 @@ h2{
     z-index: 10;
 }
 
-.sticky-note button:hover{
+.sticky-note button:hover {
     transition-duration: 200ms;
     transform: scale(1.1);
-    
+
 }
 
 
@@ -684,18 +735,18 @@ h2{
 
 }
 
-.to-do-input-form>:nth-child(6){
+.to-do-input-form>:nth-child(6) {
     flex-direction: row;
 }
 
-.form-cancel-button{
-    margin-left:auto;
-    background-color: var( --delete-cancel-bg-color);
+.form-cancel-button {
+    margin-left: auto;
+    background-color: var(--delete-cancel-bg-color);
     padding: var(--small-button-padding);
 }
 
-.form-submit-button{
-    background-color:var(--save-submit-bg-color);
+.form-submit-button {
+    background-color: var(--save-submit-bg-color);
     padding: var(--small-button-padding);
 }
 
@@ -711,9 +762,10 @@ h2{
     background-color: var(--lighter-color);
 }
 
-.project-input-form>:nth-child(2){
+.project-input-form>:nth-child(2) {
     flex-direction: row;
 }
+
 /*-------------------------------------- */
 
 .upcoming {
@@ -729,22 +781,25 @@ h2{
     padding: 5px;
     border-radius: var(--main-block-border-radius);
     border: var(--content-border-px) solid var(--content-border-color);
+
+    overflow-y: auto;
 }
 
-.upcoming-item{
- padding: 10px;
- background-color: var(--lighter-color);
- color: black;
- border-radius: 15px;
+.upcoming-item {
+    padding: 10px;
+    background-color: var(--lighter-color);
+    color: black;
+    border-radius: 15px;
+    margin: 5px;
 }
 
-.upcoming-task-name{
-    font-weight:500;
+.upcoming-task-name {
+    font-weight: 500;
 
 }
 
-.upcoming-project-name{
-    font-weight:700;
+.upcoming-project-name {
+    font-weight: 700;
 
 }
 
